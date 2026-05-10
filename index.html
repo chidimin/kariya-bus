@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  
+</body>
+
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>刈谷市バス</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1976d2">
+</head>
+<body>
+
+<header>
+    <h1>刈谷市バス</h1>
+</header>
+
+<main>
+
+    <!-- 運行状況 -->
+    <section class="card">
+        <h2>運行状況</h2>
+
+        <div class="delay-box">
+            <div class="route">
+                <span>東境線</span>
+                <span id="higashizakai-delay" class="delay normal">
+                    通常運行
+                </span>
+            </div>
+
+            <div class="route">
+                <span>西境線</span>
+                <span id="nishizakai-delay" class="delay late">
+                    3分遅れ
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 路線選択 -->
+    <section class="card">
+
+        <h2>時刻表</h2>
+
+        <div class="route-tabs">
+            <button class="route-btn active"
+                onclick="selectRoute('east', this)">
+                東境線
+            </button>
+
+            <button class="route-btn"
+                onclick="selectRoute('west', this)">
+                西境線
+            </button>
+        </div>
+
+        <!-- バス停 -->
+        <select id="stopSelect" onchange="renderTimetable()"></select>
+
+        <!-- ダイヤ切替 -->
+        <div class="tabs">
+
+            <button id="weekdayBtn"
+                class="active"
+                onclick="setMode('weekday')">
+                平日
+            </button>
+
+            <button id="holidayBtn"
+                onclick="setMode('holiday')">
+                土日祝
+            </button>
+
+        </div>
+
+        <!-- 時刻表 -->
+        <ul id="timetable"></ul>
+
+    </section>
+
+</main>
+
+<script src="app.js"></script>
+
+</body>
+</html>
