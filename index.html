@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  
+</body>
+
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>刈谷市バス案内</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#f3f4f6;
+    color:#111;
+}
+
+header{
+    background:#0f9d92;
+    color:white;
+    text-align:center;
+    padding:28px 16px;
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+main{
+    padding:16px;
+}
+
+button{
+    border:none;
+    border-radius:24px;
+    padding:18px;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* 路線 */
+
+.route-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+}
+
+.route-btn{
+    background:#e5e7eb;
+}
+
+.route-btn.active{
+    background:#0f9d92;
+    color:white;
+}
+
+/* 上下 */
+
+.direction-buttons{
+    display:flex;
+    gap:12px;
+    margin-bottom:24px;
+}
+
+.direction-btn{
+    width:100px;
+    background:#e5e7eb;
+}
+
+.direction-btn.active{
+    background:#0f9d92;
+    color:white;
+}
+
+/* タイトル */
+
+.section-title{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:18px;
+}
+
+/* 運行状況 */
+
+.status-list{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    margin-bottom:32px;
+}
+
+.status-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.status-name{
+    font-size:18px;
+    font-weight:bold;
+    flex:1;
+}
+
+.badge{
+    color:white;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.normal{
+    background:#4caf50;
+}
+
+.stop{
+    background:#ef4444;
+}
+
+/* バス停選択 */
+
+select{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:20px;
+    font-size:18px;
+    background:white;
+    margin-bottom:32px;
+}
+
+/* 時刻表 */
+
+.stop-name{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.times{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.time-box{
+    background:white;
+    padding:20px 8px;
+    border-radius:20px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* スマホ */
+
+@media(max-width:480px){
+
+    header h1{
+        font-size:28px;
+    }
+
+    .section-title{
+        font-size:24px;
+    }
+
+    .status-name{
+        font-size:16px;
+    }
+
+    .time-box{
+        font-size:20px;
+        padding:16px 6px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>刈谷市バス案内</h1>
+</header>
+
+<main>
+
+    <!-- 路線 -->
+
+    <div class="route-buttons">
+
+        <button class="route-btn active"
+        onclick="changeRoute('east',this)">
+            東境線
+        </button>
+
+        <button class="route-btn"
+        onclick="changeRoute('west',this)">
+            西境線
+        </button>
+
+    </div>
+
+    <!-- 上下 -->
+
+    <div class="direction-buttons">
+
+        <button class="direction-btn active"
+        onclick="changeDirection('up',this)">
+            上り
+        </button>
+
+        <button class="direction-btn"
+        onclick="changeDirection('down',this)">
+            下り
+        </button>
+
+    </div>
+
+    <!-- 運行状況 -->
+
+    <div class="section-title">運行状況</div>
+
+    <div class="status-list">
+
+        <div class="status-row">
+            <div class="status-name">
+                東境線 → 刈谷市役所行
+            </div>
+
+            <div class="badge">
+                通常運行
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                東境線 → 洲原温水プール行
+            </div>
+
+            <div class="badge">
+                通常運行
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                西境線 → 刈谷市役所行
+            </div>
+
+            <div class="badge">
+                通常運行
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                西境線 → 刈谷ハイウェイオアシス行
+            </div>
+
+            <div class="badge">
+                通常運行
+            </div>
+        </div>
+
+    </div>
+
+    <!-- バス停 -->
+
+    <div class="section-title">バス停選択</div>
+
+    <select id="stopSelect"
+    onchange="updateTimetable()">
+    </select>
+
+    <!-- 時刻表 -->
+
+    <div class="section-title">時刻表</div>
+
+    <div class="stop-name" id="stopName"></div>
+
+    <div class="times" id="times"></div>
+
+</main>
+
+<script>
+
+/* 現在路線 */
+
+let currentRoute = "east";
+let currentDirection = "up";
+
+/* バス停 */
+
+const stops = {
+
+    east:{
+
+        up:[
+            "富士松図書館",
+            "一里山市民館",
+            "朝日町2丁目",
+            "刈谷駅北口",
+            "交通児童遊園",
+            "刈谷駅南口"
+        ],
+
+        down:[
+            "刈谷駅南口",
+            "交通児童遊園",
+            "刈谷駅北口",
+            "朝日町2丁目",
+            "一里山市民館",
+            "富士松図書館"
+        ]
+
+    },
+
+    west:{
+
+        up:[
+            "富士松図書館",
+            "蒲生池遊園",
+            "今岡町日向",
+            "生きがいセンター",
+            "刈谷駅北口",
+            "刈谷駅南口"
+        ],
+
+        down:[
+            "刈谷駅南口",
+            "刈谷駅北口",
+            "生きがいセンター",
+            "今岡町日向",
+            "蒲生池遊園",
+            "富士松図書館"
+        ]
+
+    }
+
+};
+
+/* 時刻表 */
+
+const timetable = {
+
+"富士松図書館":[
+"06:05","06:35","07:00","07:35",
+"08:00","08:35","09:00","09:35",
+"10:00","10:35","11:00","11:35",
+"12:00","12:35","13:00","13:35",
+"14:00","14:35","15:00","15:35",
+"16:00","16:35","17:00","17:35",
+"18:00","18:35","19:00","19:35",
+"20:00","20:35","21:00"
+],
+
+"一里山市民館":[
+"06:10","06:40","07:10","07:40",
+"08:10","08:40","09:10","09:40",
+"10:10","10:40","11:10","11:40",
+"12:10","12:40","13:10","13:40",
+"14:10","14:40","15:10","15:40",
+"16:10","16:40","17:10","17:40",
+"18:10","18:40","19:10","19:40",
+"20:10","20:40","21:10"
+],
+
+"朝日町2丁目":[
+"06:20","06:50","07:20","07:50",
+"08:20","08:50","09:20","09:50",
+"10:20","10:50","11:20","11:50",
+"12:20","12:50","13:20","13:50",
+"14:20","14:50","15:20","15:50",
+"16:20","16:50","17:20","17:50",
+"18:20","18:50","19:20","19:50",
+"20:20","20:50","21:20"
+],
+
+"刈谷駅北口":[
+"06:35","07:05","07:35","08:05",
+"08:35","09:05","09:35","10:05",
+"10:35","11:05","11:35","12:05",
+"12:35","13:05","13:35","14:05",
+"14:35","15:05","15:35","16:05",
+"16:35","17:05","17:35","18:05",
+"18:35","19:05","19:35","20:05",
+"20:35","21:05"
+],
+
+"交通児童遊園":[
+"06:40","07:10","07:40","08:10",
+"08:40","09:10","09:40","10:10",
+"10:40","11:10","11:40","12:10",
+"12:40","13:10","13:40","14:10",
+"14:40","15:10","15:40","16:10",
+"16:40","17:10","17:40","18:10",
+"18:40","19:10","19:40","20:10",
+"20:40","21:10"
+],
+
+"刈谷駅南口":[
+"06:50","07:20","07:50","08:20",
+"08:50","09:20","09:50","10:20",
+"10:50","11:20","11:50","12:20",
+"12:50","13:20","13:50","14:20",
+"14:50","15:20","15:50","16:20",
+"16:50","17:20","17:50","18:20",
+"18:50","19:20","19:50","20:20",
+"20:50","21:20"
+],
+
+"蒲生池遊園":[
+"06:15","06:45","07:15","07:45",
+"08:15","08:45","09:15","09:45",
+"10:15","10:45","11:15","11:45",
+"12:15","12:45","13:15","13:45",
+"14:15","14:45","15:15","15:45",
+"16:15","16:45","17:15","17:45",
+"18:15","18:45","19:15","19:45",
+"20:15","20:45","21:15"
+],
+
+"今岡町日向":[
+"06:25","06:55","07:25","07:55",
+"08:25","08:55","09:25","09:55",
+"10:25","10:55","11:25","11:55",
+"12:25","12:55","13:25","13:55",
+"14:25","14:55","15:25","15:55",
+"16:25","16:55","17:25","17:55",
+"18:25","18:55","19:25","19:55",
+"20:25","20:55","21:25"
+],
+
+"生きがいセンター":[
+"06:30","07:00","07:30","08:00",
+"08:30","09:00","09:30","10:00",
+"10:30","11:00","11:30","12:00",
+"12:30","13:00","13:30","14:00",
+"14:30","15:00","15:30","16:00",
+"16:30","17:00","17:30","18:00",
+"18:30","19:00","19:30","20:00",
+"20:30","21:00"
+]
+
+};
+
+/* 路線変更 */
+
+function changeRoute(route,btn){
+
+    currentRoute = route;
+
+    document.querySelectorAll(".route-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    loadStops();
+
+}
+
+/* 上下変更 */
+
+function changeDirection(direction,btn){
+
+    currentDirection = direction;
+
+    document.querySelectorAll(".direction-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    loadStops();
+
+}
+
+/* バス停読込 */
+
+function loadStops(){
+
+    const select =
+    document.getElementById("stopSelect");
+
+    select.innerHTML = "";
+
+    stops[currentRoute][currentDirection]
+    .forEach(stop=>{
+
+        const option =
+        document.createElement("option");
+
+        option.value = stop;
+        option.textContent = stop;
+
+        select.appendChild(option);
+
+    });
+
+    updateTimetable();
+
+}
+
+/* 時刻表更新 */
+
+function updateTimetable(){
+
+    const stop =
+    document.getElementById("stopSelect").value;
+
+    document.getElementById("stopName")
+    .textContent = stop;
+
+    const timesDiv =
+    document.getElementById("times");
+
+    timesDiv.innerHTML = "";
+
+    timetable[stop].forEach(time=>{
+
+        const div =
+        document.createElement("div");
+
+        div.className = "time-box";
+
+        div.textContent = time;
+
+        timesDiv.appendChild(div);
+
+    });
+
+}
+
+/* 運行状況 */
+
+function getStatus(){
+
+    const now = new Date();
+
+    const hour = now.getHours();
+
+    if(hour >= 6 && hour < 22){
+        return "normal";
+    }
+
+    return "stop";
+
+}
+
+function updateStatus(){
+
+    const status = getStatus();
+
+    const badges =
+    document.querySelectorAll(".badge");
+
+    badges.forEach(badge=>{
+
+        if(status === "normal"){
+
+            badge.textContent = "通常運行";
+
+            badge.classList.remove("stop");
+
+            badge.classList.add("normal");
+
+        }else{
+
+            badge.textContent = "運行終了";
+
+            badge.classList.remove("normal");
+
+            badge.classList.add("stop");
+
+        }
+
+    });
+
+}
+
+/* 初期表示 */
+
+loadStops();
+updateStatus();
+
+</script>
+
+</body>
+</html>
