@@ -1,0 +1,176 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f3f4f6;
+  color: #111;
+}
+
+/* ヘッダー */
+
+header {
+  background: #0f9d92;
+  color: white;
+  padding: 18px 16px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.4;
+}
+
+/* メイン */
+
+main {
+  padding: 16px;
+}
+
+/* カード */
+
+.card,
+.status-card {
+  background: white;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* 見出し */
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 28px;
+}
+
+/* 路線ボタン */
+
+.route-buttons,
+.direction-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* ボタン */
+
+.route-buttons button,
+.direction-buttons button {
+  border: none;
+  border-radius: 18px;
+  padding: 16px 12px;
+  font-size: 18px;
+  font-weight: bold;
+  background: #e5e7eb;
+}
+
+/* 選択中 */
+
+.route-buttons button.active,
+.direction-buttons button.active {
+  background: #0f9d92;
+  color: white;
+}
+
+/* 運行状況 */
+
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.status-row:last-child {
+  border-bottom: none;
+}
+
+.status-row span:first-child {
+  flex: 1;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* 運行バッジ */
+
+.status-badge {
+  background: #4caf50;
+  color: white;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.stop {
+  background: #ef4444;
+}
+
+/* プルダウン */
+
+.stop-select {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  font-size: 16px;
+  background: white;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+/* 時刻表 */
+
+.times {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.time-box {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 10px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* スマホ最適化 */
+
+@media (max-width: 480px) {
+
+  header h1 {
+    font-size: 26px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .route-buttons button,
+  .direction-buttons button {
+    font-size: 16px;
+    padding: 14px 10px;
+  }
+
+  .time-box {
+    font-size: 20px;
+    padding: 16px 8px;
+  }
+
+}

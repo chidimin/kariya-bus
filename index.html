@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+
+<body>
+  
+</body>
+
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>刈谷市バス案内</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#f3f4f6;
+    color:#111;
+}
+
+/* ヘッダー */
+
+header{
+    background:#0f9d92;
+    color:white;
+    text-align:center;
+    padding:28px 16px;
+}
+
+header h1{
+    margin:0;
+    font-size:32px;
+}
+
+/* メイン */
+
+main{
+    padding:16px;
+}
+
+/* ボタン共通 */
+
+button{
+    border:none;
+    border-radius:24px;
+    padding:18px;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* 路線 */
+
+.route-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+}
+
+.route-btn{
+    background:#e5e7eb;
+}
+
+.route-btn.active{
+    background:#0f9d92;
+    color:white;
+}
+
+/* 上り下り */
+
+.direction-buttons{
+    display:flex;
+    gap:12px;
+    margin-bottom:24px;
+}
+
+.direction-btn{
+    width:100px;
+    background:#e5e7eb;
+}
+
+.direction-btn.active{
+    background:#0f9d92;
+    color:white;
+}
+
+/* タイトル */
+
+.section-title{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:18px;
+}
+
+/* 運行状況 */
+
+.status-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:28px;
+}
+
+.status-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.status-name{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.badge{
+    color:white;
+    padding:10px 16px;
+    border-radius:999px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.normal{
+    background:#4caf50;
+}
+
+.stop{
+    background:#ef4444;
+}
+
+/* プルダウン */
+
+select{
+    width:100%;
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    font-size:18px;
+    background:white;
+    margin-bottom:32px;
+}
+
+/* 時刻表 */
+
+.stop-name{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.times{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.time-box{
+    background:white;
+    padding:24px 10px;
+    border-radius:20px;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* スマホ */
+
+@media(max-width:480px){
+
+    header h1{
+        font-size:28px;
+    }
+
+    .section-title{
+        font-size:24px;
+    }
+
+    .time-box{
+        font-size:22px;
+        padding:18px 8px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <h1>刈谷市バス案内</h1>
+</header>
+
+<main>
+
+    <!-- 路線 -->
+
+    <div class="route-buttons">
+        <button class="route-btn active" onclick="changeRoute('east',this)">
+            東境線
+        </button>
+
+        <button class="route-btn" onclick="changeRoute('west',this)">
+            西境線
+        </button>
+    </div>
+
+    <!-- 上り下り -->
+
+    <div class="direction-buttons">
+        <button class="direction-btn active" onclick="changeDirection('up',this)">
+            上り
+        </button>
+
+        <button class="direction-btn" onclick="changeDirection('down',this)">
+            下り
+        </button>
+    </div>
+
+    <!-- 運行状況 -->
+
+    <div class="section-title">運行状況</div>
+
+    <div class="status-list">
+
+        <div class="status-row">
+            <div class="status-name">
+                東境線 → 刈谷市役所行
+            </div>
+
+            <div class="badge normal">
+                通常運行
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                東境線 → 洲原温水プール行
+            </div>
+
+            <div class="badge stop">
+                運行終了
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                西境線 → 刈谷市役所行
+            </div>
+
+            <div class="badge normal">
+                通常運行
+            </div>
+        </div>
+
+        <div class="status-row">
+            <div class="status-name">
+                西境線 → 刈谷ハイウェイオアシス行
+            </div>
+
+            <div class="badge stop">
+                運行終了
+            </div>
+        </div>
+
+    </div>
+
+    <!-- バス停 -->
+
+    <div class="section-title">バス停選択</div>
+
+    <select id="stopSelect" onchange="updateTimetable()">
+    </select>
+
+    <!-- 時刻表 -->
+
+    <div class="section-title">時刻表</div>
+
+    <div class="stop-name" id="stopName"></div>
+
+    <div class="times" id="times"></div>
+
+</main>
+
+<script>
+
+let currentRoute = "east";
+let currentDirection = "up";
+
+/* バス停 */
+
+const stops = {
+
+    east:{
+        up:[
+            "富士松図書館",
+            "一里山市民館",
+            "朝日町2丁目",
+            "刈谷駅北口",
+            "交通児童遊園",
+            "刈谷駅南口"
+        ],
+
+        down:[
+            "刈谷駅南口",
+            "交通児童遊園",
+            "刈谷駅北口",
+            "朝日町2丁目",
+            "一里山市民館",
+            "富士松図書館"
+        ]
+    },
+
+    west:{
+        up:[
+            "富士松図書館",
+            "蒲生池遊園",
+            "今岡町日向",
+            "生きがいセンター",
+            "刈谷駅北口",
+            "刈谷駅南口"
+        ],
+
+        down:[
+            "刈谷駅南口",
+            "刈谷駅北口",
+            "生きがいセンター",
+            "今岡町日向",
+            "蒲生池遊園",
+            "富士松図書館"
+        ]
+    }
+
+};
+
+/* 時刻 */
+
+const timetable = {
+
+    "富士松図書館":["06:05","07:00","08:00"],
+
+    "一里山市民館":["06:10","07:10","08:10"],
+
+    "朝日町2丁目":["06:20","07:20","08:20"],
+
+    "刈谷駅北口":["06:35","07:35","08:35"],
+
+    "交通児童遊園":["06:40","07:40","08:40"],
+
+    "刈谷駅南口":["06:50","07:50","08:50"],
+
+    "蒲生池遊園":["06:15","07:15","08:15"],
+
+    "今岡町日向":["06:25","07:25","08:25"],
+
+    "生きがいセンター":["06:30","07:30","08:30"]
+
+};
+
+/* 路線変更 */
+
+function changeRoute(route,btn){
+
+    currentRoute = route;
+
+    document.querySelectorAll(".route-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    loadStops();
+}
+
+/* 上下変更 */
+
+function changeDirection(direction,btn){
+
+    currentDirection = direction;
+
+    document.querySelectorAll(".direction-btn")
+    .forEach(b=>b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    loadStops();
+}
+
+/* バス停読み込み */
+
+function loadStops(){
+
+    const select = document.getElementById("stopSelect");
+
+    select.innerHTML = "";
+
+    stops[currentRoute][currentDirection]
+    .forEach(stop=>{
+
+        const option = document.createElement("option");
+
+        option.value = stop;
+        option.textContent = stop;
+
+        select.appendChild(option);
+
+    });
+
+    updateTimetable();
+}
+
+/* 時刻表更新 */
+
+function updateTimetable(){
+
+    const stop = document.getElementById("stopSelect").value;
+
+    document.getElementById("stopName").textContent = stop;
+
+    const timesDiv = document.getElementById("times");
+
+    timesDiv.innerHTML = "";
+
+    timetable[stop].forEach(time=>{
+
+        const div = document.createElement("div");
+
+        div.className = "time-box";
+
+        div.textContent = time;
+
+        timesDiv.appendChild(div);
+
+    });
+
+}
+
+/* 初期表示 */
+
+loadStops();
+
+</script>
+
+</body>
+</html>

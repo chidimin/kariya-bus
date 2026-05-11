@@ -1,0 +1,10 @@
+{
+  "name": "刈谷市バス案内",
+  "short_name": "刈谷バス",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#009688",
+  "orientation": "portrait",
+  "lang": "ja"
+}
