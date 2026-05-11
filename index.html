@@ -1,0 +1,290 @@
+<!-- リアルタイム遅延表示対応版 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>かりまる時刻表</title>
+
+<style>
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f3f4f6;
+}
+
+h1 {
+    text-align: center;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.next {
+    background: #dcfce7;
+    border-left: 6px solid #16a34a;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+.time-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.time-item {
+    background: #e5e7eb;
+    padding: 8px 12px;
+    border-radius: 999px;
+}
+
+.delay {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>かりまる バス時刻表</h1>
+
+<div class="card">
+
+<label>路線</label>
+<select id="routeSelect">
+    <option value="east">東境線</option>
+    <option value="west">西境線</option>
+</select>
+
+<label>方向</label>
+<select id="directionSelect"></select>
+
+<label>バス停</label>
+<select id="stopSelect"></select>
+
+<button onclick="showTimes()">時刻表示</button>
+
+<div class="next" id="nextBus">
+次の便：--:--
+</div>
+
+<div class="delay" id="delayInfo"></div>
+
+<div class="time-list" id="timeList"></div>
+
+</div>
+
+<script>
+
+const data = {
+
+    east: {
+        directions: {
+
+            cityhall: {
+                name: "刈谷市役所行",
+                stops: {
+                    "洲原温水プール": ["6:00","6:45","7:20","9:40","10:50","11:25","13:30","15:40","17:10","18:20"],
+                    "つくし作業所": ["6:03","6:48","7:23","9:43","10:53","11:28","13:33","15:43","17:13","18:23"],
+                    "井ケ谷市民館": ["6:07","6:52","7:27","9:47","10:57","11:32","13:37","15:47","17:17","18:27"]
+                }
+            },
+
+            pool: {
+                name: "洲原温水プール行",
+                stops: {
+                    "刈谷市役所": ["7:30","8:45","9:25","11:45","13:40","15:10","16:15","17:30","19:00","20:10"],
+                    "刈谷駅前口": ["7:34","8:49","9:28","11:48","13:43","15:13","16:18","17:34","19:03","20:13"],
+                    "中山町2丁目": ["7:56","9:11","9:46","12:06","14:01","15:31","16:38","17:58","19:20","20:30"]
+                }
+            }
+        }
+    },
+
+    west: {
+        directions: {
+
+            cityhall: {
+                name: "刈谷市役所行",
+                stops: {
+                    "刈谷ハイウェイオアシス": ["6:10","7:00","7:40","9:50","10:45","11:35","13:50","15:52","17:22","18:29"],
+                    "富士松図書館": ["6:12","7:02","7:42","9:52","10:47","11:37","13:52","15:54","17:24","18:31"],
+                    "西境町前山": ["6:15","7:05","7:45","9:55","10:50","11:40","13:55","15:57","17:27","18:34"]
+                }
+            },
+
+            oasis: {
+                name: "刈谷ハイウェイオアシス行",
+                stops: {
+                    "刈谷市役所": ["7:45","9:00","9:40","11:55","13:55","15:20","16:30","17:35","19:05","20:20"],
+                    "中山町2丁目": ["8:05","9:17","9:57","12:12","14:12","15:37","16:50","17:56","19:22","20:37"],
+                    "富士松駅": ["8:45","9:50","10:30","12:45","14:45","16:11","17:28","18:36","19:54","21:07"]
+                }
+            }
+        }
+    }
+};
+
+const routeSelect = document.getElementById("routeSelect");
+const directionSelect = document.getElementById("directionSelect");
+const stopSelect = document.getElementById("stopSelect");
+
+function loadDirections() {
+
+    directionSelect.innerHTML = "";
+
+    const route = routeSelect.value;
+    const directions = data[route].directions;
+
+    for (const key in directions) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = directions[key].name;
+        directionSelect.appendChild(option);
+    }
+
+    loadStops();
+}
+
+function loadStops() {
+
+    stopSelect.innerHTML = "";
+
+    const route = routeSelect.value;
+    const direction = directionSelect.value;
+
+    const stops = data[route].directions[direction].stops;
+
+    for (const stop in stops) {
+        const option = document.createElement("option");
+        option.value = stop;
+        option.textContent = stop;
+        stopSelect.appendChild(option);
+    }
+}
+
+function showTimes() {
+
+    const route = routeSelect.value;
+    const direction = directionSelect.value;
+    const stop = stopSelect.value;
+
+    const times = data[route].directions[direction].stops[stop];
+
+    const list = document.getElementById("timeList");
+    list.innerHTML = "";
+
+    times.forEach(time => {
+        const div = document.createElement("div");
+        div.className = "time-item";
+        div.textContent = time;
+        list.appendChild(div);
+    });
+
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let next = "本日の運行終了";
+
+    for (const time of times) {
+
+        const [h,m] = time.split(":");
+        const minutes = parseInt(h) * 60 + parseInt(m);
+
+        if (minutes >= currentMinutes) {
+            next = time;
+            break;
+        }
+    }
+
+    document.getElementById("nextBus").innerHTML = `次の便：${next}`;
+
+    const delayMinutes = 0;
+
+    if (delayMinutes > 0) {
+        document.getElementById("delayInfo").innerHTML = `現在 ${delayMinutes} 分遅れ`;
+    } else {
+        document.getElementById("delayInfo").innerHTML = "通常運行";
+    }
+}
+
+routeSelect.addEventListener("change", loadDirections);
+directionSelect.addEventListener("change", loadStops);
+
+loadDirections();
+showTimes();
+
+// =========================
+// リアルタイム遅延表示
+// =========================
+
+// FirebaseやAPIから取得する想定
+// 例: { busId: '東境線-1便', delay: 5 }
+
+const realtimeDelayData = {
+    '東境線-1便': 0,
+    '東境線-2便': 3,
+    '西境線-1便': 7
+};
+
+function getDelayText(busId) {
+    const delay = realtimeDelayData[busId] || 0;
+
+    if (delay > 0) {
+        return `🟠 ${delay}分遅れ`;
+    }
+
+    return '🟢 定刻';
+}
+
+function renderRealtimeStatus(busId) {
+    const el = document.getElementById('delayStatus');
+    if (!el) return;
+
+    el.innerHTML = getDelayText(busId);
+}
+
+// 10秒ごとに更新
+setInterval(() => {
+    renderRealtimeStatus('東境線-1便');
+}, 10000);
+
+// 初回表示
+window.onload = () => {
+    renderRealtimeStatus('東境線-1便');
+};
+
+</script>
+
+</body>
+</html>
