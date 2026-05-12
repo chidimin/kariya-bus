@@ -1,6 +1,7 @@
 name: Firebase Cron
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
 
@@ -10,5 +11,4 @@ jobs:
 
     steps:
       - name: Access Firebase
-        run: |
-          curl https://chidimin.github.io/kariya-bus/
+        run: curl https://chidimin.github.io/kariya-bus/
