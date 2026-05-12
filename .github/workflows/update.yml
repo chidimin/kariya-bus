@@ -1,0 +1,49 @@
+name: Update Bus Data
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Bus Data
+        run: |
+          curl -L "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city" -o source.html
+
+      - name: Create JSON
+        run: |
+          python3 <<EOF
+          import json
+          from bs4 import BeautifulSoup
+
+          with open("source.html", "r", encoding="utf-8") as f:
+              html = f.read()
+
+          soup = BeautifulSoup(html, "html.parser")
+
+          data = {
+              "updated": "auto",
+              "html_length": len(html)
+          }
+
+          with open("data.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+          EOF
+
+      - name: Commit
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+          git add data.json
+
+          git commit -m "update bus data" || echo "No changes"
+
+          git push
