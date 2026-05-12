@@ -1,5 +1,4 @@
 name: Firebase Cron
-
 on:
   schedule:
     - cron: "*/15 * * * *"
