@@ -1,183 +1,154 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #f3f4f6;
-  color: #111;
+body{
+    font-family:sans-serif;
+    margin:0;
+    background:#f5f5f5;
+    color:#222;
 }
 
 /* ヘッダー */
 
-header {
-  background: #0f9d92;
-  color: white;
-  padding: 18px 16px;
-  text-align: center;
+header{
+    background:#0095d9;
+    color:white;
+    padding:16px;
+    text-align:center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.4;
+header h1{
+    margin:0;
+    font-size:28px;
 }
 
 /* メイン */
 
-main {
-  padding: 16px;
+main{
+    padding:12px;
 }
 
-/* カード */
+/* 遅延表示 */
 
-.card,
-.status-card {
-  background: white;
-  border-radius: 24px;
-  padding: 20px;
-  margin-bottom: 20px;
+#delay-info{
+
+    display:none;
+
+    background:#fff3cd;
+    color:#856404;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:18px;
+    font-weight:bold;
+
+    margin-bottom:12px;
+
+    line-height:1.7;
+
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.08);
 }
 
-/* 見出し */
+/* 更新時刻 */
 
-h2 {
-  margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 28px;
+#update-time{
+    text-align:right;
+    color:#666;
+    font-size:13px;
+    margin-bottom:10px;
 }
 
-/* 路線ボタン */
+/* 操作ボタン */
 
-.route-buttons,
-.direction-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
+.controls{
+    padding:12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    background:white;
+    border-radius:12px;
+    margin-bottom:12px;
 }
 
-/* ボタン */
-
-.route-buttons button,
-.direction-buttons button {
-  border: none;
-  border-radius: 18px;
-  padding: 16px 12px;
-  font-size: 18px;
-  font-weight: bold;
-  background: #e5e7eb;
+button{
+    border:none;
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:15px;
+    cursor:pointer;
+    background:#ddd;
 }
 
-/* 選択中 */
-
-.route-buttons button.active,
-.direction-buttons button.active {
-  background: #0f9d92;
-  color: white;
+button.active{
+    background:#0095d9;
+    color:white;
+    font-weight:bold;
 }
 
-/* 運行状況 */
+/* テーブル */
 
-.status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    margin-top:8px;
+    border-radius:12px;
+    overflow:hidden;
 }
 
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+th,td{
+    border:1px solid #ddd;
+    padding:10px 6px;
+    text-align:center;
+    font-size:14px;
 }
 
-.status-row:last-child {
-  border-bottom: none;
+th{
+    background:#0095d9;
+    color:white;
 }
 
-.status-row span:first-child {
-  flex: 1;
-  font-size: 15px;
-  font-weight: bold;
+.stop{
+    background:#f0f7ff;
+    font-weight:bold;
+    white-space:nowrap;
 }
 
-/* 運行バッジ */
+/* タイトル */
 
-.status-badge {
-  background: #4caf50;
-  color: white;
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: bold;
-  white-space: nowrap;
+.routeTitle{
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    margin-top:12px;
 }
 
-.stop {
-  background: #ef4444;
+.info{
+    text-align:center;
+    margin-top:4px;
+    color:#666;
+    font-size:14px;
 }
 
-/* プルダウン */
-
-.stop-select {
-  width: 100%;
-  border: none;
-  border-radius: 18px;
-  padding: 16px;
-  font-size: 16px;
-  background: white;
-  margin-top: 12px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-}
-
-/* 時刻表 */
-
-.times{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:12px;
-}
+/* スマホ */
 
 @media(max-width:600px){
 
-.times{
-grid-template-columns:repeat(4,1fr);
-}
+    th,td{
+        font-size:12px;
+        padding:8px 4px;
+    }
 
-}
+    button{
+        font-size:13px;
+    }
 
-.time-box {
-  background: white;
-  border-radius: 18px;
-  padding: 18px 10px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+    header h1{
+        font-size:24px;
+    }
 
-/* スマホ最適化 */
-
-@media (max-width: 480px) {
-
-  header h1 {
-    font-size: 26px;
-  }
-
-  h2 {
-    font-size: 24px;
-  }
-
-  .route-buttons button,
-  .direction-buttons button {
-    font-size: 16px;
-    padding: 14px 10px;
-  }
-
-  .time-box {
-    font-size: 20px;
-    padding: 16px 8px;
-  }
-
+    #delay-info{
+        font-size:16px;
+    }
 }
