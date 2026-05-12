@@ -114,6 +114,12 @@ select {
     <button id="holidayBtn" onclick="setSchedule('holiday')">土日祝</button>
   </div>
 
+  <label>方面</label>
+  <select id="directionSelect" onchange="renderStops()">
+    <option value="outbound">上り</option>
+    <option value="inbound">下り</option>
+  </select>
+
   <label>路線</label>
   <select id="routeSelect" onchange="renderStops()">
     <option value="east">東境線</option>
@@ -138,6 +144,26 @@ select {
     let currentSchedule = 'weekday';
 
     const data = {
+      weekday: {
+        outbound: {
+          east: {
+            '富士松図書館': ['6:13','6:58','7:35','9:53','11:03','11:38','13:43','15:54','17:24','18:35'],
+            '一里山市民館': ['6:19','7:04','7:41','9:59','11:09','11:44','13:49','16:00','17:30','18:41'],
+            '朝日町2丁目': ['6:31','7:16','7:53','10:11','11:21','11:56','14:01','16:12','17:42','18:53'],
+            '刈谷駅北口': ['6:36','7:21','7:58','10:16','11:26','12:01','14:06','16:17','17:47','18:58'],
+            '交通児童遊園': ['6:39','7:24','8:01','10:19','11:29','12:04','14:09','16:20','17:50','19:01'],
+            '刈谷駅南口': ['6:44','7:29','8:06','10:24','11:34','12:09','14:14','16:25','17:55','19:06']
+          },
+          west: {
+            '富士松図書館': ['6:52','8:13','10:03','11:23','11:58','13:33','14:33','15:43','16:58','18:18'],
+            '蒲生池遊園': ['6:57','8:18','10:08','11:28','12:03','13:38','14:38','15:48','17:03','18:23'],
+            '今岡町日向': ['7:03','8:24','10:14','11:34','12:09','13:44','14:44','15:54','17:09','18:29'],
+            '生きがいセンター': ['7:15','8:36','10:26','11:46','12:21','13:56','14:56','16:06','17:21','18:41'],
+            '刈谷駅北口': ['7:20','8:41','10:31','11:51','12:26','14:01','15:01','16:11','17:26','18:46'],
+            '刈谷駅南口': ['7:28','8:49','10:39','11:59','12:34','14:09','15:09','16:19','17:34','18:54']
+          }
+        },
+        inbound: {
       weekday: {
         east: {
           '富士松図書館': ['6:13','6:58','7:35','9:53','11:03','11:38','13:43','15:54','17:24','18:35'],
@@ -196,7 +222,7 @@ select {
       const stopSelect = document.getElementById('stopSelect');
       stopSelect.innerHTML = '';
 
-      Object.keys(data[currentSchedule][route]).forEach(stop => {
+      Object.keys(data[currentSchedule][document.getElementById('directionSelect').value][route]).forEach(stop => {
         const option = document.createElement('option');
         option.value = stop;
         option.textContent = stop;
@@ -209,7 +235,7 @@ select {
     function showTimetable() {
       const route = document.getElementById('routeSelect').value;
       const stop = document.getElementById('stopSelect').value;
-      const times = data[currentSchedule][route][stop];
+      const times = data[currentSchedule][document.getElementById('directionSelect').value][route][stop];
 
       const timetable = document.getElementById('timetable');
       timetable.innerHTML = `<div class="time-list">${times.map(t => `<div class="time-item">${t}</div>`).join('')}</div>`;
