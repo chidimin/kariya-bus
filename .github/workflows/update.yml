@@ -16,14 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fetch Bus Data
+      - name: Create Test File
         run: |
-          curl -o bus.json https://api-public.odpt.org/api/v4/odpt:Bus
+          date > test.txt
 
       - name: Commit
         run: |
           git config --global user.name github-actions
           git config --global user.email github-actions@github.com
           git add .
-          git commit -m "update bus data" || exit 0
+          git commit -m "update test" || exit 0
           git push
