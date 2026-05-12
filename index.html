@@ -128,7 +128,7 @@ th{
 <div class="time" id="nextBus">--:--</div>
 
 <div class="delay" id="delay">
-平常運行
+運行待ち
 </div>
 
 <div class="update" id="update">
@@ -324,7 +324,7 @@ function updateDisplay(){
     const current =
     now.getHours()*60 + now.getMinutes();
 
-    let next="本日終了";
+    let next = null;
 
     for(let t of times){
 
@@ -340,24 +340,38 @@ function updateDisplay(){
 
     }
 
-    document.getElementById("nextBus")
-    .textContent = next;
+    const nextBusElement =
+    document.getElementById("nextBus");
 
-    const rand = Math.random();
+    const delayElement =
+    document.getElementById("delay");
 
-    if(rand<0.3){
+    if(next){
 
-        const delay=Math.floor(Math.random()*10)+1;
+        nextBusElement.textContent = next;
 
-        document.getElementById("delay")
-        .textContent =
-        delay + "分遅れ";
+        const [h,m] = next.split(":").map(Number);
+
+        const remain =
+        (h*60 + m) - current;
+
+        if(remain >= 20){
+
+            delayElement.textContent = "運行待ち";
+
+        }else{
+
+            delayElement.textContent =
+            "まもなく到着（あと" + remain + "分）";
+
+        }
 
     }else{
 
-        document.getElementById("delay")
-        .textContent =
-        "平常運行";
+        nextBusElement.textContent = "本日終了";
+
+        delayElement.textContent =
+        "本日の運行は終了しました";
 
     }
 
