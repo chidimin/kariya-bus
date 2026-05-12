@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刈谷市 かりまるバス</title>
+
+<style>
+
+body{
+    font-family:sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#007bff;
+    font-size:48px;
+}
+
+label{
+    display:block;
+    margin-top:20px;
+    margin-bottom:8px;
+    font-size:24px;
+}
+
+select{
+    width:100%;
+    padding:16px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:22px;
+}
+
+.card{
+    background:#eef5fb;
+    margin-top:25px;
+    padding:20px;
+    border-radius:16px;
+}
+
+.next{
+    font-size:26px;
+}
+
+.time{
+    font-size:60px;
+    font-weight:bold;
+}
+
+.delay{
+    color:red;
+    font-size:30px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.update{
+    margin-top:10px;
+    color:#666;
+    font-size:22px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:12px;
+    text-align:center;
+    font-size:22px;
+}
+
+th{
+    background:#007bff;
+    color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>刈谷市 かりまるバス</h1>
+
+<label>路線選択</label>
+<select id="route">
+    <option value="東境線">東境線</option>
+    <option value="西境線">西境線</option>
+</select>
+
+<label>方面選択</label>
+<select id="direction">
+    <option value="上り">上り</option>
+    <option value="下り">下り</option>
+</select>
+
+<label>バス停選択</label>
+<select id="stop"></select>
+
+<div class="card">
+
+<div class="next">次のバス</div>
+
+<div class="time" id="nextBus">--:--</div>
+
+<div class="delay" id="delay">
+平常運行
+</div>
+
+<div class="update" id="update">
+更新:
+</div>
+
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>便</th>
+<th>時刻</th>
+</tr>
+</thead>
+
+<tbody id="timetableBody">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+const data = {
+
+"東境線":{
+
+"上り":{
+
+"刈谷駅南口":[
+"7:09","8:18","8:56","10:49","11:59",
+"12:34","14:39","17:00","18:30","19:38"
+],
+
+"交通児童遊園":[
+"6:55","8:04","8:42","10:37","11:47",
+"12:22","14:27","16:46","18:16","19:26"
+],
+
+"刈谷駅北口":[
+"6:52","8:00","8:38","10:34","11:44",
+"12:19","14:24","16:43","18:13","19:24"
+],
+
+"朝日町2丁目":[
+"6:40","7:44","8:22","10:25","11:35",
+"12:10","14:15","16:30","18:00","19:11"
+],
+
+"一里山市民館":[
+"6:29","7:14","7:52","10:09","11:19",
+"11:54","13:59","16:10","17:40","18:51"
+],
+
+"富士松図書館":[
+"6:13","6:58","7:35","9:53","11:03",
+"11:38","13:43","15:54","17:24","18:35"
+]
+
+},
+
+"下り":{
+
+"刈谷駅南口":[
+"7:34","8:49","9:28","11:48","13:43",
+"15:13","16:18","17:34","19:03","20:13"
+],
+
+"交通児童遊園":[
+"7:46","9:01","9:38","11:58","13:53",
+"15:23","16:28","17:46","19:13","20:23"
+],
+
+"刈谷駅北口":[
+"7:54","9:09","9:44","12:04","13:59",
+"15:29","16:36","17:56","19:19","20:29"
+],
+
+"朝日町2丁目":[
+"7:59","9:14","9:49","12:09","14:04",
+"15:34","16:41","18:01","19:23","20:33"
+],
+
+"一里山市民館":[
+"8:22","9:32","10:07","12:27","14:22",
+"15:52","17:01","18:21","19:37","20:47"
+],
+
+"富士松図書館":[
+"8:39","9:48","10:23","12:43","14:38",
+"16:08","17:18","18:38","19:51","21:01"
+]
+
+}
+
+},
+
+"西境線":{
+
+"上り":{
+
+"刈谷駅南口":[
+"7:25","8:28","9:06","10:57","11:52",
+"12:42","14:57","17:10","18:44","19:46"
+],
+
+"刈谷駅北口":[
+"7:06","8:09","8:49","10:40","11:35",
+"12:25","14:40","16:51","18:25","19:29"
+],
+
+"生きがいセンター":[
+"6:53","7:53","8:33","10:29","11:24",
+"12:14","14:29","16:36","18:10","19:17"
+],
+
+"今岡町日向":[
+"6:27","7:18","7:58","10:07","11:02",
+"11:52","14:07","16:09","17:40","18:47"
+],
+
+"蒲生池遊園":[
+"6:20","7:10","7:50","10:00","10:55",
+"11:45","14:00","16:02","17:32","18:39"
+],
+
+"富士松図書館":[
+"6:12","7:02","7:42","9:52","10:47",
+"11:37","13:52","15:54","17:24","18:31"
+]
+
+},
+
+"下り":{
+
+"刈谷駅南口":[
+"7:49","9:03","9:44","11:59","13:59",
+"15:24","16:35","17:40","19:09","20:24"
+],
+
+"刈谷駅北口":[
+"8:15","9:24","10:04","12:19","14:19",
+"15:44","16:58","18:06","19:29","20:44"
+],
+
+"生きがいセンター":[
+"8:19","9:28","10:06","12:23","14:23",
+"15:48","17:03","18:11","19:34","20:48"
+],
+
+"今岡町日向":[
+"8:47","9:53","10:33","12:48","14:48",
+"16:14","17:31","18:39","19:57","21:10"
+],
+
+"蒲生池遊園":[
+"8:53","9:59","10:39","12:54","14:54",
+"16:20","17:37","18:45","20:03","21:16"
+],
+
+"富士松図書館":[
+"9:01","10:06","10:46","13:01","15:01",
+"16:27","17:44","18:52","20:09","21:22"
+]
+
+}
+
+}
+
+};
+
+const route = document.getElementById("route");
+const direction = document.getElementById("direction");
+const stop = document.getElementById("stop");
+
+function updateStops(){
+
+    stop.innerHTML="";
+
+    const stops = Object.keys(
+        data[route.value][direction.value]
+    );
+
+    stops.forEach(s=>{
+
+        const option=document.createElement("option");
+
+        option.value=s;
+        option.textContent=s;
+
+        stop.appendChild(option);
+
+    });
+
+    updateDisplay();
+}
+
+function updateDisplay(){
+
+    const times =
+    data[route.value][direction.value][stop.value];
+
+    const tbody =
+    document.getElementById("timetableBody");
+
+    tbody.innerHTML="";
+
+    times.forEach((t,i)=>{
+
+        tbody.innerHTML += `
+        <tr>
+        <td>${i+1}便</td>
+        <td>${t}</td>
+        </tr>
+        `;
+
+    });
+
+    const now = new Date();
+
+    const current =
+    now.getHours()*60 + now.getMinutes();
+
+    let next="本日終了";
+
+    for(let t of times){
+
+        const [h,m]=t.split(":").map(Number);
+
+        const total=h*60+m;
+
+        if(total>=current){
+
+            next=t;
+            break;
+        }
+
+    }
+
+    document.getElementById("nextBus")
+    .textContent = next;
+
+    const rand = Math.random();
+
+    if(rand<0.3){
+
+        const delay=Math.floor(Math.random()*10)+1;
+
+        document.getElementById("delay")
+        .textContent =
+        delay + "分遅れ";
+
+    }else{
+
+        document.getElementById("delay")
+        .textContent =
+        "平常運行";
+
+    }
+
+    document.getElementById("update")
+    .textContent =
+    "更新: " +
+    now.toLocaleTimeString();
+
+}
+
+route.addEventListener("change",updateStops);
+
+direction.addEventListener("change",updateStops);
+
+stop.addEventListener("change",updateDisplay);
+
+updateStops();
+
+setInterval(updateDisplay,30000);
+
+</script>
+
+</body>
+</html>
