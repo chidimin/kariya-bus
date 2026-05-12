@@ -476,9 +476,11 @@ function render(){
 render();
 
 
-// ===============================
-// リアルタイム遅延情報取得
-// ===============================
+<!-- ===============================
+リアルタイム遅延情報取得
+=============================== -->
+
+<script>
 
 async function fetchDelayInfo(){
 
@@ -505,10 +507,12 @@ async function fetchDelayInfo(){
 
         const results = [];
 
-        // 東境線① = 上り
+        // =========================
+        // 東境線 上り
+        // =========================
         const eastUp =
             text.match(
-                /東境線[\s\S]*?①[\s\S]*?(\d+)分遅れ/
+                /東境線[\s\S]*?①[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
             );
 
         if(eastUp){
@@ -518,10 +522,12 @@ async function fetchDelayInfo(){
             );
         }
 
-        // 東境線② = 下り
+        // =========================
+        // 東境線 下り
+        // =========================
         const eastDown =
             text.match(
-                /東境線[\s\S]*?②[\s\S]*?(\d+)分遅れ/
+                /東境線[\s\S]*?②[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
             );
 
         if(eastDown){
@@ -531,10 +537,12 @@ async function fetchDelayInfo(){
             );
         }
 
-        // 西境線③ = 上り
+        // =========================
+        // 西境線 上り
+        // =========================
         const westUp =
             text.match(
-                /西境線[\s\S]*?③[\s\S]*?(\d+)分遅れ/
+                /西境線[\s\S]*?③[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
             );
 
         if(westUp){
@@ -544,10 +552,12 @@ async function fetchDelayInfo(){
             );
         }
 
-        // 西境線④ = 下り
+        // =========================
+        // 西境線 下り
+        // =========================
         const westDown =
             text.match(
-                /西境線[\s\S]*?④[\s\S]*?(\d+)分遅れ/
+                /西境線[\s\S]*?④[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
             );
 
         if(westDown){
@@ -603,14 +613,14 @@ async function fetchDelayInfo(){
             "delayContainer"
         ).style.display = "none";
     }
-    
+
 }
 
 // 初回実行
 fetchDelayInfo();
 
-// 60秒ごと自動更新
-setInterval(fetchDelayInfo, 60000);
+// 30秒ごと自動更新
+setInterval(fetchDelayInfo, 30000);
 
 </script>
 
