@@ -11,5 +11,4 @@ jobs:
 
     steps:
       - name: Call Firebase Function
-        run: |
-          curl -X GET "https://asia-northeast1-kariya-bus.cloudfunctions.net/fetchBusData"
+        run: curl -X GET "https://asia-northeast1-kariya-bus.cloudfunctions.net/fetchBusData"
