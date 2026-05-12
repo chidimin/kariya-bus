@@ -630,21 +630,19 @@ async function fetchDelayInfo(){
 
         const parser = new DOMParser();
 
-        const doc =
-            parser.parseFromString(
-                html,
-                "text/html"
-            );
+        const doc = parser.parseFromString(
+            html,
+            "text/html"
+        );
 
         const text = doc.body.innerText;
 
         const results = [];
 
         // 東境線 上り
-        const eastUp =
-            text.match(
-                /東境線[\s\S]*?①[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
-            );
+        const eastUp = text.match(
+            /東境線[\s\S]*?①[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+        );
 
         if(eastUp){
 
@@ -654,10 +652,9 @@ async function fetchDelayInfo(){
         }
 
         // 東境線 下り
-        const eastDown =
-            text.match(
-                /東境線[\s\S]*?②[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
-            );
+        const eastDown = text.match(
+            /東境線[\s\S]*?②[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+        );
 
         if(eastDown){
 
@@ -667,10 +664,9 @@ async function fetchDelayInfo(){
         }
 
         // 西境線 上り
-        const westUp =
-            text.match(
-                /西境線[\s\S]*?③[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
-            );
+        const westUp = text.match(
+            /西境線[\s\S]*?③[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+        );
 
         if(westUp){
 
@@ -680,10 +676,9 @@ async function fetchDelayInfo(){
         }
 
         // 西境線 下り
-        const westDown =
-            text.match(
-                /西境線[\s\S]*?④[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
-            );
+        const westDown = text.match(
+            /西境線[\s\S]*?④[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+        );
 
         if(westDown){
 
