@@ -1,296 +1,304 @@
-<!DOCTYPE html><html lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>刈谷市バス時刻案内</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f3f4f6;
-      margin: 0;
-      padding: 20px;
-      color: #111827;
-    }.container {
-  max-width: 720px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>刈谷市バス時刻案内</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 500px;
   margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #18a34a;
+  font-size: 48px;
+  margin-bottom: 30px;
 }
 
 .card {
   background: white;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-h1 {
-  text-align: center;
-  color: #16a34a;
-}
-
-h2 {
-  margin-top: 0;
+label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 select {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  margin-top: 8px;
-  margin-bottom: 16px;
-  font-size: 16px;
-  background: white;
-}
-
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-  margin-bottom: 20px;
-}
-
-.tabs button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #d1d5db;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.tabs button.active {
-  background: #16a34a;
-  color: white;
-  font-weight: bold;
-}
-
-#nextBus {
-  text-align: center;
-}
-
-.next-time {
-  font-size: 36px;
-  font-weight: bold;
-  color: #16a34a;
-}
-
-.remaining {
-  margin-top: 8px;
+  height: 56px;
+  border-radius: 16px;
+  border: 2px solid #ddd;
+  padding: 0 16px;
   font-size: 20px;
 }
 
-.ended {
-  font-size: 22px;
-  color: #dc2626;
+.button-row {
+  display: flex;
+  gap: 12px;
+}
+
+.button-row button {
+  flex: 1;
+  height: 60px;
+  border: none;
+  border-radius: 16px;
+  font-size: 28px;
   font-weight: bold;
 }
 
-.time-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
-  margin-top: 10px;
+.active {
+  background: #18a34a;
+  color: white;
 }
 
-.time-item {
-  background: #f9fafb;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 18px;
-  border: 1px solid #e5e7eb;
+.inactive {
+  background: #d9d9df;
 }
 
-  </style>
+.bus-item {
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 24px;
+}
+
+.next {
+  color: #18a34a;
+  font-weight: bold;
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>刈谷市バス時刻案内</h1><div class="card">
-  <label>ダイヤ種別</label>
-  <div class="tabs">
-    <button id="weekdayBtn" class="active" onclick="setSchedule('weekday')">平日</button>
-    <button id="holidayBtn" onclick="setSchedule('holiday')">土日祝</button>
-  </div>
+<div class="container">
 
-  <label>方面</label>
-  <select id="directionSelect" onchange="renderStops()">
-    <option value="outbound">上り</option>
-    <option value="inbound">下り</option>
-  </select>
+<h1>刈谷市バス時刻案内</h1>
 
-  <label>路線</label>
-  <select id="routeSelect" onchange="renderStops()">
-    <option value="east">東境線</option>
-    <option value="west">西境線</option>
-  </select>
+<div class="card">
 
-  <label>停留所</label>
-  <select id="stopSelect" onchange="showTimetable()"></select>
+<label>ダイヤ種別</label>
+<div class="button-row">
+  <button id="weekdayBtn" class="active">平日</button>
+  <button id="holidayBtn" class="inactive">土日祝</button>
+</div>
+
+<label>方向</label>
+<select id="directionSelect">
+  <option value="up">上り</option>
+  <option value="down">下り</option>
+</select>
+
+<label>路線</label>
+<select id="routeSelect">
+  <option value="east">東境線</option>
+  <option value="west">西境線</option>
+</select>
+
+<label>停留所</label>
+<select id="stopSelect"></select>
+
 </div>
 
 <div class="card">
   <h2>次のバス</h2>
-  <div id="nextBus">読み込み中...</div>
+  <div id="nextBus"></div>
 </div>
 
 <div class="card">
-  <h2>時刻表一覧</h2>
-  <div id="timetable"></div>
+  <h2>時刻一覧</h2>
+  <div id="allTimes"></div>
 </div>
 
-  </div>  <script>
-    let currentSchedule = 'weekday';
+</div>
 
-    const data = {
-      weekday: {
-        outbound: {
-          east: {
-            '富士松図書館': ['6:13','6:58','7:35','9:53','11:03','11:38','13:43','15:54','17:24','18:35'],
-            '一里山市民館': ['6:19','7:04','7:41','9:59','11:09','11:44','13:49','16:00','17:30','18:41'],
-            '朝日町2丁目': ['6:31','7:16','7:53','10:11','11:21','11:56','14:01','16:12','17:42','18:53'],
-            '刈谷駅北口': ['6:36','7:21','7:58','10:16','11:26','12:01','14:06','16:17','17:47','18:58'],
-            '交通児童遊園': ['6:39','7:24','8:01','10:19','11:29','12:04','14:09','16:20','17:50','19:01'],
-            '刈谷駅南口': ['6:44','7:29','8:06','10:24','11:34','12:09','14:14','16:25','17:55','19:06']
-          },
-          west: {
-            '富士松図書館': ['6:52','8:13','10:03','11:23','11:58','13:33','14:33','15:43','16:58','18:18'],
-            '蒲生池遊園': ['6:57','8:18','10:08','11:28','12:03','13:38','14:38','15:48','17:03','18:23'],
-            '今岡町日向': ['7:03','8:24','10:14','11:34','12:09','13:44','14:44','15:54','17:09','18:29'],
-            '生きがいセンター': ['7:15','8:36','10:26','11:46','12:21','13:56','14:56','16:06','17:21','18:41'],
-            '刈谷駅北口': ['7:20','8:41','10:31','11:51','12:26','14:01','15:01','16:11','17:26','18:46'],
-            '刈谷駅南口': ['7:28','8:49','10:39','11:59','12:34','14:09','15:09','16:19','17:34','18:54']
-          }
-        },
-        inbound: {
-          east: {
-            '刈谷駅南口': ['7:10','8:10','9:10','10:10'],
-            '交通児童遊園': ['7:13','8:13','9:13','10:13'],
-            '刈谷駅北口': ['7:16','8:16','9:16','10:16'],
-            '朝日町2丁目': ['7:21','8:21','9:21','10:21'],
-            '一里山市民館': ['7:30','8:30','9:30','10:30'],
-            '富士松図書館': ['7:36','8:36','9:36','10:36']
-          },
-          west: {
-            '刈谷駅南口': ['7:20','8:20','9:20','10:20'],
-            '刈谷駅北口': ['7:25','8:25','9:25','10:25'],
-            '生きがいセンター': ['7:31','8:31','9:31','10:31'],
-            '今岡町日向': ['7:43','8:43','9:43','10:43'],
-            '蒲生池遊園': ['7:49','8:49','9:49','10:49'],
-            '富士松図書館': ['7:54','8:54','9:54','10:54']
-          }
-        }
+<script>
+let currentType = 'weekday';
+
+const stopLists = {
+  east: [
+    '富士松図書館',
+    '一里山市民館',
+    '朝日町2丁目',
+    '刈谷駅北口',
+    '交通児童遊園',
+    '刈谷駅南口'
+  ],
+  west: [
+    '富士松図書館',
+    '蒲生池遊園',
+    '今岡町日向',
+    '生きがいセンター',
+    '刈谷駅北口',
+    '刈谷駅南口'
+  ]
+};
+
+const timetableData = {
+  weekday: {
+    east: {
+      up: {
+        '富士松図書館': ['6:35','7:10','7:45','8:20','9:00','10:00','12:00','14:00','16:00','18:00'],
+        '一里山市民館': ['6:37','7:12','7:47','8:22','9:02','10:02','12:02','14:02','16:02','18:02'],
+        '朝日町2丁目': ['6:45','7:20','7:55','8:30','9:10','10:10','12:10','14:10','16:10','18:10'],
+        '刈谷駅北口': ['6:50','7:25','8:00','8:35','9:15','10:15','12:15','14:15','16:15','18:15'],
+        '交通児童遊園': ['6:55','7:30','8:05','8:40','9:20','10:20','12:20','14:20','16:20','18:20'],
+        '刈谷駅南口': ['7:00','7:35','8:10','8:45','9:25','10:25','12:25','14:25','16:25','18:25']
       },
-      holiday: {
-        outbound: {
-          east: {
-            '富士松図書館': ['6:33','7:53','9:48','11:08'],
-            '一里山市民館': ['6:39','7:59','9:54','11:14'],
-            '朝日町2丁目': ['6:51','8:11','10:06','11:26'],
-            '刈谷駅北口': ['6:56','8:16','10:11','11:31'],
-            '交通児童遊園': ['6:59','8:19','10:14','11:34'],
-            '刈谷駅南口': ['7:04','8:24','10:19','11:39']
-          },
-          west: {
-            '富士松図書館': ['6:52','8:13','10:03','11:23'],
-            '蒲生池遊園': ['6:57','8:18','10:08','11:28'],
-            '今岡町日向': ['7:03','8:24','10:14','11:34'],
-            '生きがいセンター': ['7:15','8:36','10:26','11:46'],
-            '刈谷駅北口': ['7:20','8:41','10:31','11:51'],
-            '刈谷駅南口': ['7:28','8:49','10:39','11:59']
-          }
-        },
-        inbound: {
-          east: {
-            '刈谷駅南口': ['8:00','10:00','12:00'],
-            '交通児童遊園': ['8:03','10:03','12:03'],
-            '刈谷駅北口': ['8:06','10:06','12:06'],
-            '朝日町2丁目': ['8:11','10:11','12:11'],
-            '一里山市民館': ['8:20','10:20','12:20'],
-            '富士松図書館': ['8:26','10:26','12:26']
-          },
-          west: {
-            '刈谷駅南口': ['8:10','10:10','12:10'],
-            '刈谷駅北口': ['8:15','10:15','12:15'],
-            '生きがいセンター': ['8:21','10:21','12:21'],
-            '今岡町日向': ['8:33','10:33','12:33'],
-            '蒲生池遊園': ['8:39','10:39','12:39'],
-            '富士松図書館': ['8:44','10:44','12:44']
-          }
-        }
+      down: {
+        '富士松図書館': ['7:20','8:00','8:40','9:20','10:20','12:20','14:20','16:20','18:20','20:00'],
+        '一里山市民館': ['7:18','7:58','8:38','9:18','10:18','12:18','14:18','16:18','18:18','19:58'],
+        '朝日町2丁目': ['7:10','7:50','8:30','9:10','10:10','12:10','14:10','16:10','18:10','19:50'],
+        '刈谷駅北口': ['7:05','7:45','8:25','9:05','10:05','12:05','14:05','16:05','18:05','19:45'],
+        '交通児童遊園': ['7:03','7:43','8:23','9:03','10:03','12:03','14:03','16:03','18:03','19:43'],
+        '刈谷駅南口': ['7:00','7:40','8:20','9:00','10:00','12:00','14:00','16:00','18:00','19:40']
       }
-    };
+    },
 
-    function setSchedule(type) {
-      currentSchedule = type;
-
-      document.getElementById('weekdayBtn').classList.remove('active');
-      document.getElementById('holidayBtn').classList.remove('active');
-
-      if(type === 'weekday') {
-        document.getElementById('weekdayBtn').classList.add('active');
-      } else {
-        document.getElementById('holidayBtn').classList.add('active');
-      }
-
-      renderStops();
-    }
-
-    function renderStops() {
-      const direction = document.getElementById('directionSelect').value;
-      const route = document.getElementById('routeSelect').value;
-      const stopSelect = document.getElementById('stopSelect');
-      stopSelect.innerHTML = '';
-
-      Object.keys(data[currentSchedule][document.getElementById('directionSelect').value][route]).forEach(stop => {
-        const option = document.createElement('option');
-        option.value = stop;
-        option.textContent = stop;
-        stopSelect.appendChild(option);
-      });
-
-      showTimetable();
-    }
-
-    function showTimetable() {
-      const route = document.getElementById('routeSelect').value;
-      const stop = document.getElementById('stopSelect').value;
-      const times = data[currentSchedule][document.getElementById('directionSelect').value][route][stop];
-
-      const timetable = document.getElementById('timetable');
-      timetable.innerHTML = `<div class="time-list">${times.map(t => `<div class="time-item">${t}</div>`).join('')}</div>`;
-
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-      let next = null;
-
-      for (const time of times) {
-        const [h, m] = time.split(':').map(Number);
-        const minutes = h * 60 + m;
-
-        if (minutes >= currentMinutes) {
-          next = { time, diff: minutes - currentMinutes };
-          break;
-        }
-      }
-
-      const nextBus = document.getElementById('nextBus');
-
-      if (next) {
-        nextBus.innerHTML = `
-          <div style="font-size:32px;font-weight:bold;">${next.time}</div>
-          <div>あと ${next.diff} 分</div>
-        `;
-      } else {
-        nextBus.innerHTML = `
-          <div class="ended">本日の運行は終了しました</div>
-          <div class="remaining">時刻表は下に表示されています</div>
-        `;
+    west: {
+      up: {
+        '富士松図書館': ['6:40','7:20','8:00','9:00','10:00','11:00','13:00','15:00','17:00','19:00'],
+        '蒲生池遊園': ['6:43','7:23','8:03','9:03','10:03','11:03','13:03','15:03','17:03','19:03'],
+        '今岡町日向': ['6:46','7:26','8:06','9:06','10:06','11:06','13:06','15:06','17:06','19:06'],
+        '生きがいセンター': ['6:50','7:30','8:10','9:10','10:10','11:10','13:10','15:10','17:10','19:10'],
+        '刈谷駅北口': ['6:55','7:35','8:15','9:15','10:15','11:15','13:15','15:15','17:15','19:15'],
+        '刈谷駅南口': ['7:00','7:40','8:20','9:20','10:20','11:20','13:20','15:20','17:20','19:20']
+      },
+      down: {
+        '富士松図書館': ['7:30','8:30','9:30','10:30','11:30','12:30','14:30','16:30','18:30','20:00'],
+        '蒲生池遊園': ['7:27','8:27','9:27','10:27','11:27','12:27','14:27','16:27','18:27','19:57'],
+        '今岡町日向': ['7:24','8:24','9:24','10:24','11:24','12:24','14:24','16:24','18:24','19:54'],
+        '生きがいセンター': ['7:20','8:20','9:20','10:20','11:20','12:20','14:20','16:20','18:20','19:50'],
+        '刈谷駅北口': ['7:15','8:15','9:15','10:15','11:15','12:15','14:15','16:15','18:15','19:45'],
+        '刈谷駅南口': ['7:10','8:10','9:10','10:10','11:10','12:10','14:10','16:10','18:10','19:40']
       }
     }
+  },
 
-    renderStops();
-  </script></body>
+  holiday: {
+    east: {
+      up: {
+        '富士松図書館': ['7:00','8:00','9:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'],
+        '一里山市民館': ['7:02','8:02','9:02','10:02','11:02','12:02','14:02','16:02','18:02','20:02'],
+        '朝日町2丁目': ['7:10','8:10','9:10','10:10','11:10','12:10','14:10','16:10','18:10','20:10'],
+        '刈谷駅北口': ['7:15','8:15','9:15','10:15','11:15','12:15','14:15','16:15','18:15','20:15'],
+        '交通児童遊園': ['7:20','8:20','9:20','10:20','11:20','12:20','14:20','16:20','18:20','20:20'],
+        '刈谷駅南口': ['7:25','8:25','9:25','10:25','11:25','12:25','14:25','16:25','18:25','20:25']
+      },
+      down: {
+        '富士松図書館': ['8:00','9:00','10:00','11:00','12:00','13:00','15:00','17:00','19:00','21:00'],
+        '一里山市民館': ['7:58','8:58','9:58','10:58','11:58','12:58','14:58','16:58','18:58','20:58'],
+        '朝日町2丁目': ['7:50','8:50','9:50','10:50','11:50','12:50','14:50','16:50','18:50','20:50'],
+        '刈谷駅北口': ['7:45','8:45','9:45','10:45','11:45','12:45','14:45','16:45','18:45','20:45'],
+        '交通児童遊園': ['7:43','8:43','9:43','10:43','11:43','12:43','14:43','16:43','18:43','20:43'],
+        '刈谷駅南口': ['7:40','8:40','9:40','10:40','11:40','12:40','14:40','16:40','18:40','20:40']
+      }
+    },
+
+    west: {
+      up: {
+        '富士松図書館': ['7:30','8:30','9:30','10:30','11:30','12:30','14:30','16:30','18:30','20:30'],
+        '蒲生池遊園': ['7:33','8:33','9:33','10:33','11:33','12:33','14:33','16:33','18:33','20:33'],
+        '今岡町日向': ['7:36','8:36','9:36','10:36','11:36','12:36','14:36','16:36','18:36','20:36'],
+        '生きがいセンター': ['7:40','8:40','9:40','10:40','11:40','12:40','14:40','16:40','18:40','20:40'],
+        '刈谷駅北口': ['7:45','8:45','9:45','10:45','11:45','12:45','14:45','16:45','18:45','20:45'],
+        '刈谷駅南口': ['7:50','8:50','9:50','10:50','11:50','12:50','14:50','16:50','18:50','20:50']
+      },
+      down: {
+        '富士松図書館': ['8:30','9:30','10:30','11:30','12:30','13:30','15:30','17:30','19:30','21:00'],
+        '蒲生池遊園': ['8:27','9:27','10:27','11:27','12:27','13:27','15:27','17:27','19:27','20:57'],
+        '今岡町日向': ['8:24','9:24','10:24','11:24','12:24','13:24','15:24','17:24','19:24','20:54'],
+        '生きがいセンター': ['8:20','9:20','10:20','11:20','12:20','13:20','15:20','17:20','19:20','20:50'],
+        '刈谷駅北口': ['8:15','9:15','10:15','11:15','12:15','13:15','15:15','17:15','19:15','20:45'],
+        '刈谷駅南口': ['8:10','9:10','10:10','11:10','12:10','13:10','15:10','17:10','19:10','20:40']
+      }
+    }
+  }
+};
+
+function updateStops() {
+  const route = document.getElementById('routeSelect').value;
+  const stopSelect = document.getElementById('stopSelect');
+
+  stopSelect.innerHTML = '';
+
+  stopLists[route].forEach(stop => {
+    const option = document.createElement('option');
+    option.value = stop;
+    option.textContent = stop;
+    stopSelect.appendChild(option);
+  });
+
+  updateTimes();
+}
+
+function updateTimes() {
+  const route = document.getElementById('routeSelect').value;
+  const direction = document.getElementById('directionSelect').value;
+  const stop = document.getElementById('stopSelect').value;
+
+  const times = timetableData[currentType][route][direction][stop];
+
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let next = '本日の運行は終了しました';
+
+  for (const time of times) {
+    const [h, m] = time.split(':').map(Number);
+    const total = h * 60 + m;
+
+    if (total >= currentMinutes) {
+      next = time;
+      break;
+    }
+  }
+
+  document.getElementById('nextBus').innerHTML = `<div class="bus-item next">${next}</div>`;
+
+  document.getElementById('allTimes').innerHTML = times
+    .map(t => `<div class="bus-item">${t}</div>`)
+    .join('');
+}
+
+updateStops();
+
+const weekdayBtn = document.getElementById('weekdayBtn');
+const holidayBtn = document.getElementById('holidayBtn');
+
+weekdayBtn.onclick = () => {
+  currentType = 'weekday';
+  weekdayBtn.className = 'active';
+  holidayBtn.className = 'inactive';
+  updateTimes();
+};
+
+holidayBtn.onclick = () => {
+  currentType = 'holiday';
+  holidayBtn.className = 'active';
+  weekdayBtn.className = 'inactive';
+  updateTimes();
+};
+
+routeSelect.onchange = updateStops;
+directionSelect.onchange = updateTimes;
+stopSelect.onchange = updateTimes;
+</script>
+
+</body>
 </html>
