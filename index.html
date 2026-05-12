@@ -713,6 +713,125 @@ async function fetchDelayInfo(){
             delayContainer.style.display =
                 "none";
 
+<!-- ===============================
+リアルタイム遅延情報取得
+=============================== -->
+
+<script>
+
+async function fetchDelayInfo(){
+
+    try{
+
+        const response = await fetch(
+            "https://api.allorigins.win/raw?url=" +
+            encodeURIComponent(
+                "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
+            )
+        );
+
+        const html = await response.text();
+
+        const parser = new DOMParser();
+
+        const doc = parser.parseFromString(
+            html,
+            "text/html"
+        );
+
+        const text = doc.body.innerText;
+
+        const results = [];
+
+        // 路線ごとに分割
+        const eastSection =
+            text.match(/東境線[\s\S]*?(?=西境線|$)/);
+
+        const westSection =
+            text.match(/西境線[\s\S]*?$/);
+
+        // =========================
+        // 東境線
+        // =========================
+        if(eastSection){
+
+            const eastText = eastSection[0];
+
+            const eastUp =
+                eastText.match(
+                    /①[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+                );
+
+            if(eastUp){
+
+                results.push(
+                    `東境線上り ${eastUp[1]}分遅れ`
+                );
+            }
+
+            const eastDown =
+                eastText.match(
+                    /②[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+                );
+
+            if(eastDown){
+
+                results.push(
+                    `東境線下り ${eastDown[1]}分遅れ`
+                );
+            }
+        }
+
+        // =========================
+        // 西境線
+        // =========================
+        if(westSection){
+
+            const westText = westSection[0];
+
+            const westUp =
+                westText.match(
+                    /③[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+                );
+
+            if(westUp){
+
+                results.push(
+                    `西境線上り ${westUp[1]}分遅れ`
+                );
+            }
+
+            const westDown =
+                westText.match(
+                    /④[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+                );
+
+            if(westDown){
+
+                results.push(
+                    `西境線下り ${westDown[1]}分遅れ`
+                );
+            }
+        }
+
+        const delayContainer =
+            document.getElementById(
+                "delayContainer"
+            );
+
+        const delayList =
+            document.getElementById(
+                "delayList"
+            );
+
+        delayList.innerHTML = "";
+
+        // 遅延なし
+        if(results.length === 0){
+
+            delayContainer.style.display =
+                "none";
+
             return;
         }
 
