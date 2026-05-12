@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刈谷市 かりまるバス</title>
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0080ff;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        
+        .card {
+            background: #f0f8ff;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+        
+        .time {
+            font-size: 28px;
+            font-weight: bold;
+            color: #222;
+        }
+        
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #e60000;
+        }
+        
+        .small {
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="container">
+        
+        <h1>刈谷市 かりまるバス</h1>
+        
+        <label>路線選択</label>
+        <select id="routeSelect">
+            <option value="東境線">東境線</option>
+            <option value="西境線">西境線</option>
+        </select>
+        
+        <label>バス停選択</label>
+        <select id="stopSelect"></select>
+        
+        <div class="card">
+            <div>次のバス</div>
+            <div class="time" id="nextBus">--:--</div>
+            
+            <div class="status" id="delayStatus">
+                平常運行
+            </div>
+            
+            <div class="small" id="updateTime"></div>
+        </div>
+        
+    </div>
+    
+    <script>
+        const timetable = {
+            
+            "東境線": {
+                
+                "刈谷駅南口": [
+                    "6:35", "7:10", "7:45", "8:25", "9:15",
+                    "10:05", "11:15", "12:05", "13:15",
+                    "14:05", "15:10", "16:00", "17:10", "18:15"
+                ],
+                
+                "交通児童遊園": [
+                    "6:40", "7:15", "7:50", "8:30", "9:20",
+                    "10:10", "11:20", "12:10", "13:20",
+                    "14:10", "15:15", "16:05", "17:15", "18:20"
+                ],
+                
+                "刈谷駅北口": [
+                    "6:45", "7:20", "7:55", "8:35", "9:25",
+                    "10:15", "11:25", "12:15", "13:25",
+                    "14:15", "15:20", "16:10", "17:20", "18:25"
+                ],
+                
+                "朝日町2丁目": [
+                    "6:48", "7:23", "7:58", "8:38", "9:28",
+                    "10:18", "11:28", "12:18", "13:28",
+                    "14:18", "15:23", "16:13", "17:23", "18:28"
+                ],
+                
+                "一里山市民館": [
+                    "6:55", "7:30", "8:05", "8:45", "9:35",
+                    "10:25", "11:35", "12:25", "13:35",
+                    "14:25", "15:30", "16:20", "17:30", "18:35"
+                ],
+                
+                "富士松図書館": [
+                    "7:00", "7:35", "8:10", "8:50", "9:40",
+                    "10:30", "11:40", "12:30", "13:40",
+                    "14:30", "15:35", "16:25", "17:35", "18:40"
+                ]
+            },
+            
+            "西境線": {
+                
+                "刈谷駅南口": [
+                    "6:20", "7:00", "7:40", "8:20", "9:10",
+                    "10:00", "11:00", "12:00", "13:00",
+                    "14:00", "15:00", "16:00", "17:00", "18:00"
+                ],
+                
+                "刈谷駅北口": [
+                    "6:25", "7:05", "7:45", "8:25", "9:15",
+                    "10:05", "11:05", "12:05", "13:05",
+                    "14:05", "15:05", "16:05", "17:05", "18:05"
+                ],
+                
+                "生きがいセンター": [
+                    "6:30", "7:10", "7:50", "8:30", "9:20",
+                    "10:10", "11:10", "12:10", "13:10",
+                    "14:10", "15:10", "16:10", "17:10", "18:10"
+                ],
+                
+                "今岡町日向": [
+                    "6:35", "7:15", "7:55", "8:35", "9:25",
+                    "10:15", "11:15", "12:15", "13:15",
+                    "14:15", "15:15", "16:15", "17:15", "18:15"
+                ],
+                
+                "蒲生池遊園": [
+                    "6:40", "7:20", "8:00", "8:40", "9:30",
+                    "10:20", "11:20", "12:20", "13:20",
+                    "14:20", "15:20", "16:20", "17:20", "18:20"
+                ],
+                
+                "富士松図書館": [
+                    "6:45", "7:25", "8:05", "8:45", "9:35",
+                    "10:25", "11:25", "12:25", "13:25",
+                    "14:25", "15:25", "16:25", "17:25", "18:25"
+                ]
+            }
+        };
+        
+        const routeSelect = document.getElementById("routeSelect");
+        const stopSelect = document.getElementById("stopSelect");
+        
+        function updateStops() {
+            
+            const route = routeSelect.value;
+            
+            stopSelect.innerHTML = "";
+            
+            Object.keys(timetable[route]).forEach(stop => {
+                
+                const option = document.createElement("option");
+                option.value = stop;
+                option.textContent = stop;
+                
+                stopSelect.appendChild(option);
+                
+            });
+            
+            updateBusTime();
+        }
+        
+        function getCurrentTime() {
+            
+            const now = new Date();
+            
+            return now.getHours() * 60 + now.getMinutes();
+        }
+        
+        function updateBusTime() {
+            
+            const route = routeSelect.value;
+            const stop = stopSelect.value;
+            
+            const times = timetable[route][stop];
+            
+            const now = getCurrentTime();
+            
+            let next = "本日の運行終了";
+            
+            for (let t of times) {
+                
+                const [h, m] = t.split(":").map(Number);
+                
+                const total = h * 60 + m;
+                
+                if (total >= now) {
+                    
+                    next = t;
+                    break;
+                }
+            }
+            
+            document.getElementById("nextBus").textContent = next;
+            
+            simulateDelay();
+            
+            document.getElementById("updateTime").textContent =
+                "更新: " + new Date().toLocaleTimeString();
+        }
+        
+        function simulateDelay() {
+            
+            const delayStatus = document.getElementById("delayStatus");
+            
+            const random = Math.random();
+            
+            if (random < 0.3) {
+                
+                const delay = Math.floor(Math.random() * 10) + 1;
+                
+                delayStatus.textContent =
+                    "現在 " + delay + "分遅れ";
+                
+            } else {
+                
+                delayStatus.textContent =
+                    "平常運行";
+            }
+        }
+        
+        routeSelect.addEventListener("change", updateStops);
+        
+        stopSelect.addEventListener("change", updateBusTime);
+        
+        updateStops();
+        
+        setInterval(updateBusTime, 30000);
+    </script>
+    
+</body>
+
+</html>
