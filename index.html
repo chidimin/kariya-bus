@@ -400,7 +400,7 @@ times:[
 
 };
 
-fction setRoute(route){
+function setRoute(route){
     currentRoute = route;
 
 un    document.getElementById("routeEast").classList.remove("active");
@@ -471,12 +471,35 @@ function render(){
         html += `<tr>
         <td class="stop">${index+1}便</td>`;
 
-        row.forEach(time=>{
-            html += `<td>${time}</td>`;
-        });
+       row.forEach(time=>{
 
-        html += "</tr>";
-    });
+    let className = "";
+
+    if(time !== "-"){
+
+        const [hour, minute] =
+            time.split(":").map(Number);
+
+        const busMinutes =
+            hour * 60 + minute;
+
+        if(
+            !nextBusFound &&
+            busMinutes >= currentMinutes
+        ){
+
+            className = "nextBus";
+
+            nextBusFound = true;
+        }
+    }
+
+    html += `
+        <td class="${className}">
+            ${time}
+        </td>
+    `;
+});
 
     html += "</table>";
 
