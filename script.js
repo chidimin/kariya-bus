@@ -141,3 +141,51 @@ function renderBusTimes() {
 window.onload = function () {
   renderBusTimes();
 };
+async function fetchDelayInfo() {
+
+  const delayText =
+    document.getElementById("delay-text");
+
+  try {
+
+    const url =
+      "https://api.allorigins.win/raw?url=https://www.buscatch.jp/rt/pc/index.php?xmlmc=0";
+
+    const response = await fetch(url);
+
+    const html = await response.text();
+
+    const parser = new DOMParser();
+
+    const doc =
+      parser.parseFromString(html, "text/html");
+
+    const text = doc.body.innerText;
+
+    const results = [];
+
+    const matches =
+      text.match(/遅れ[^。\n]*/g);
+
+    if (matches) {
+      results.push(...matches);
+    }
+
+    if (results.length === 0) {
+      results.push("現在遅延情報はありません");
+    }
+
+    delayText.innerHTML =
+      results.join("<br>");
+
+  } catch (error) {
+
+    delayText.textContent =
+      "遅延情報を取得できません";
+
+  }
+}
+
+fetchDelayInfo();
+
+setInterval(fetchDelayInfo, 30000);
