@@ -110,11 +110,8 @@ let currentDirection = "up";
 
 function renderBusTimes() {
 
-  const key =
-    currentDay + "_" + currentDirection;
-
   const data =
-    busData[currentRoute][key];
+    busData[currentRoute][currentDirection];
 
   const container =
     document.getElementById("bus-times");
