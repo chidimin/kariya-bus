@@ -539,7 +539,7 @@ async function fetchDelayInfo(){
 
         // 全ての「○分遅れ」を取得
         const matches =
-            [...html.matchAll(/([東西]境線)[\s\S]*?(上り|下り)?[\s\S]*?(\d+)分遅れ/g)];
+    [...html.matchAll(/([東西]境線)[\s\S]*?(\d+)分遅れ/g)];
 
         matches.forEach(match=>{
 
