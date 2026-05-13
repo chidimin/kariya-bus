@@ -400,10 +400,10 @@ times:[
 
 };
 
-function setRoute(route){
+fction setRoute(route){
     currentRoute = route;
 
-    document.getElementById("routeEast").classList.remove("active");
+un    document.getElementById("routeEast").classList.remove("active");
     document.getElementById("routeWest").classList.remove("active");
 
     if(route==="east"){
@@ -446,6 +446,13 @@ function setDirection(direction) {
 }
 
 function render(){
+
+    let nextBusFound = false;
+
+    const now = new Date();
+
+    const currentMinutes =
+        now.getHours() * 60 + now.getMinutes();
 
     const obj = data[currentRoute][currentDay][currentDirection];
 
