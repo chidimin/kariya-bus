@@ -527,11 +527,11 @@ async function fetchDelayInfo(){
     try{
 
         const response = await fetch(
-            "https://corsproxy.io/?" +
-            encodeURIComponent(
-                "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
-            )
-        );
+    "https://api.allorigins.win/raw?url=" +
+    encodeURIComponent(
+        "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
+    )
+);
 
         const html = await response.text();
 
