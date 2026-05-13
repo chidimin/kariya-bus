@@ -138,4 +138,6 @@ function renderBusTimes() {
   }
 }
 
-renderBusTimes();
+window.onload = function () {
+  renderBusTimes();
+};
