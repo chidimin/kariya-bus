@@ -104,3 +104,38 @@ function getNextBus(line, type, stop) {
 
   return "本日の運行終了";
                    }
+let currentLine = "higashisakai";
+let currentDay = "weekday";
+let currentDirection = "up";
+
+function renderBusTimes() {
+
+  const key =
+    currentDay + "_" + currentDirection;
+
+  const data =
+    busData[currentLine][key];
+
+  const container =
+    document.getElementById("bus-times");
+
+  container.innerHTML = "";
+
+  for (const stop in data) {
+
+    const times = data[stop];
+
+    const div = document.createElement("div");
+
+    div.className = "stop-card";
+
+    div.innerHTML = `
+      <h3>${stop}</h3>
+      <p>${times.join(" ・ ")}</p>
+    `;
+
+    container.appendChild(div);
+  }
+}
+
+renderBusTimes();
