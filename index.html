@@ -156,12 +156,22 @@ th{
 <div class="info">
 運行終了後でも全便表示されます
 </div>
-<div id="delayContainer" style="display:none;">
-  <h3>運行遅延情報</h3>
-  <div id="delayList"></div>
-</div>
-<div id="tableArea"></div>
+<div id="delayContainer"
+style="
+display:none;
+background:#fff3cd;
+border:2px solid #ffcc00;
+padding:10px;
+margin:10px;
+border-radius:10px;
+">
 
+<h2>⚠ 遅延情報</h2>
+
+<div id="delayList"></div>
+
+</div>
+<div id="tableArea">
 <script>
 
 let currentRoute = "east";
