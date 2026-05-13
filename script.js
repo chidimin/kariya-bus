@@ -111,7 +111,7 @@ let currentDirection = "up";
 function renderBusTimes() {
 
   const data =
-    busData[currentRoute][currentDirection];
+    busData[currentLine][currentDirection];
 
   const container =
     document.getElementById("bus-times");
