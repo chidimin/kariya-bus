@@ -489,9 +489,15 @@ function render(){
 render();
 async function fetchDelayInfo(){
 
-    try{
+    ttry{
 
-        const response = await fetch(
+const delayContainer =
+document.getElementById("delayContainer");
+
+const delayList =
+document.getElementById("delayList");
+
+const response = await fetch(
             "https://api.allorigins.win/raw?url=" +
             encodeURIComponent(
                 "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
