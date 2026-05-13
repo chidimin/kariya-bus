@@ -551,10 +551,90 @@ const response = await fetch(
         // =========================
         // 東境線 上り
         // =========================
-        const eastUp =
-            text.match(
-                /東境線[\s\S]*?①[\s\S]*?(\d+)\s*分(?:遅れ|程度|前後)?/
+        async function fetchDelayInfo(){
+
+    try{
+
+        const response = await fetch(
+            "https://api.allorigins.win/raw?url=" +
+            encodeURIComponent(
+                "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
+            )
+        );
+
+        const html = await response.text();
+
+        // HTMLをそのまま文字列検索
+        const results = [];
+
+        // 東境線
+        const eastMatch =
+            html.match(/東境線[\s\S]*?(\d+)分遅れ/);
+
+        if(eastMatch){
+
+            results.push(
+                `東境線 上り ${eastMatch[1]}分遅れ`
             );
+        }
+
+        // 西境線
+        const westMatch =
+            html.match(/西境線[\s\S]*?(\d+)分遅れ/);
+
+        if(westMatch){
+
+            results.push(
+                `西境線 上り ${westMatch[1]}分遅れ`
+            );
+        }
+
+        const delayContainer =
+            document.getElementById("delayContainer");
+
+        const delayList =
+            document.getElementById("delayList");
+
+        delayList.innerHTML = "";
+
+        if(results.length === 0){
+
+            delayContainer.style.display = "none";
+
+            return;
+        }
+
+        results.forEach(item=>{
+
+            const div = document.createElement("div");
+
+            div.className = "delayItem";
+
+            div.textContent = item;
+
+            delayList.appendChild(div);
+
+        });
+
+        delayContainer.style.display = "block";
+
+    }catch(error){
+
+        console.error(error);
+
+        const delayContainer =
+            document.getElementById("delayContainer");
+
+        const delayList =
+            document.getElementById("delayList");
+
+        delayList.innerHTML =
+            "<div class='delayItem'>遅延情報を取得できません</div>";
+
+        delayContainer.style.display = "block";
+    }
+}
+
 
         if(eastUp){
 
