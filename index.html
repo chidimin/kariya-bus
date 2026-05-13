@@ -610,11 +610,18 @@ delayContainer.style.display = "block";
 
 }catch(error){
 
-    alert(error);
+    console.error(error);
 
-    document.getElementById(
-        "delayContainer"
-    ).style.display = "none";
+    const delayContainer =
+        document.getElementById("delayContainer");
+
+    const delayList =
+        document.getElementById("delayList");
+
+    delayList.innerHTML =
+        "<div class='delayItem'>遅延情報を取得できません</div>";
+
+    delayContainer.style.display = "block";
 }
 
 }
