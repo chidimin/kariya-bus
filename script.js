@@ -114,7 +114,7 @@ function renderBusTimes() {
     currentDay + "_" + currentDirection;
 
   const data =
-    busData[currentLine][key];
+    busData[currentRoute][key];
 
   const container =
     document.getElementById("bus-times");
