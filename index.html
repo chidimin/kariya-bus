@@ -535,39 +535,43 @@ async function fetchDelayInfo(){
 
         const html = await response.text();
 
-        const parser = new DOMParser();
-
-        const doc =
-            parser.parseFromString(html,"text/html");
-
         const results = [];
 
-        let currentRoute = "";
+        // 東境線
+        const eastSection =
+            html.match(/東境線[\s\S]*?西境線/);
 
-        doc.querySelectorAll("h3, li").forEach(el=>{
+        if(eastSection){
 
-            // 路線名
-            if(
-                el.tagName === "H3"
-            ){
-                currentRoute =
-                    el.textContent.trim();
-            }
+            const eastDelays =
+                [...eastSection[0].matchAll(/(\d+)分遅れ/g)];
 
-            // 遅延行
-            if(
-                el.tagName === "LI" &&
-                el.textContent.includes("遅れ")
-            ){
+            eastDelays.forEach(delay=>{
 
                 results.push(
-                    currentRoute +
-                    " " +
-                    el.textContent.trim()
+                    `東境線 ${delay[1]}分遅れ`
                 );
-            }
 
-        });
+            });
+        }
+
+        // 西境線
+        const westSection =
+            html.match(/西境線[\s\S]*/);
+
+        if(westSection){
+
+            const westDelays =
+                [...westSection[0].matchAll(/(\d+)分遅れ/g)];
+
+            westDelays.forEach(delay=>{
+
+                results.push(
+                    `西境線 ${delay[1]}分遅れ`
+                );
+
+            });
+        }
 
         const delayContainer =
             document.getElementById("delayContainer");
