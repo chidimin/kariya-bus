@@ -484,9 +484,19 @@ function render(){
         currentDirection==="up" ? "上り" : "下り";
 
     document.getElementById("title").innerText =
-        `${routeName} ${dayName} ${directionName}`;
+    `${routeName} ${dayName} ${directionName}`;
+
+}
 
 render();
+
+async function fetchDelayInfo(){document.getElementById("title").innerText =
+    `${routeName} ${dayName} ${directionName}`;
+
+}
+
+render();
+
 async function fetchDelayInfo(){
 
     try{
