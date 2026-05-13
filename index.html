@@ -527,7 +527,7 @@ async function fetchDelayInfo(){
     try{
 
         const response = await fetch(
-            "https://api.allorigins.win/raw?url=" +
+            "https://corsproxy.io/?" +
             encodeURIComponent(
                 "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
             )
@@ -535,24 +535,37 @@ async function fetchDelayInfo(){
 
         const html = await response.text();
 
+        const parser = new DOMParser();
+
+        const doc =
+            parser.parseFromString(html,"text/html");
+
         const results = [];
 
-        // 全ての「○分遅れ」を取得
-        const matches =
-    [...html.matchAll(/([東西]境線)[\s\S]*?(\d+)分遅れ/g)];
+        let currentRoute = "";
 
-        matches.forEach(match=>{
+        doc.querySelectorAll("h3, li").forEach(el=>{
 
-            const route = match[1];
+            // 路線名
+            if(
+                el.tagName === "H3"
+            ){
+                currentRoute =
+                    el.textContent.trim();
+            }
 
-            const direction = "";
+            // 遅延行
+            if(
+                el.tagName === "LI" &&
+                el.textContent.includes("遅れ")
+            ){
 
-const delay =
-    match[2];
-
-            results.push(
-                `${route} ${direction} ${delay}分遅れ`
-            );
+                results.push(
+                    currentRoute +
+                    " " +
+                    el.textContent.trim()
+                );
+            }
 
         });
 
@@ -590,18 +603,14 @@ const delay =
 
         console.error(error);
 
-        const delayContainer =
-            document.getElementById("delayContainer");
+        document.getElementById("delayContainer")
+            .style.display = "block";
 
-        const delayList =
-            document.getElementById("delayList");
-
-        delayList.innerHTML =
+        document.getElementById("delayList")
+            .innerHTML =
             "<div class='delayItem'>遅延情報を取得できません</div>";
-
-        delayContainer.style.display = "block";
     }
- }
+}
 
        
 fetchDelayInfo();
