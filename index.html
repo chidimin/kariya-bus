@@ -538,26 +538,38 @@ async function fetchDelayInfo(){
         const results = [];
 
         // 東境線
-        const eastMatch =
-            html.match(/東境線[\s\S]*?(\d+)分遅れ/);
+        const eastSection =
+    html.match(/東境線[\s\S]*?西境線/);
 
-        if(eastMatch){
+if(eastSection){
 
-            results.push(
-                `東境線 ${eastMatch[1]}分遅れ`
-            );
-        }
+    const eastDelay =
+        eastSection[0].match(/(\d+)分遅れ/);
 
-        // 西境線
-        const westMatch =
-            html.match(/西境線[\s\S]*?(\d+)分遅れ/);
+    if(eastDelay){
 
-        if(westMatch){
+        results.push(
+            `東境線 上り ${eastDelay[1]}分遅れ`
+        );
+    }
+}
 
-            results.push(
-                `西境線 ${westMatch[1]}分遅れ`
-            );
-        }
+const westSection =
+    html.match(/西境線[\s\S]*/);
+
+if(westSection){
+
+    const westDelay =
+        westSection[0].match(/(\d+)分遅れ/);
+
+    if(westDelay){
+
+        results.push(
+            `西境線 上り ${westDelay[1]}分遅れ`
+        );
+    }
+}
+        
 
         const delayContainer =
             document.getElementById("delayContainer");
