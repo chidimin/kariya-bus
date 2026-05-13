@@ -429,19 +429,19 @@ function setDay(day){
     render();
 }
 
-function setDirection(direction){
-    currentDirection = direction;
+function setDirection(direction) {
+  currentDirection = direction;
 
-    document.getElementById("upBtn").classList.remove("active");
-    document.getElementById("downBtn").classList.remove("active");
+  document.getElementById("upButton").classList.remove("active");
+  document.getElementById("downButton").classList.remove("active");
 
-    if(direction==="up"){
-        document.getElementById("upBtn").classList.add("active");
-    }else{
-        document.getElementById("downBtn").classList.add("active");
-    }
+  if (direction === "up") {
+    document.getElementById("upButton").classList.add("active");
+  } else {
+    document.getElementById("downButton").classList.add("active");
+  }
 
-    render();
+  render();
 }
 
 function render(){
