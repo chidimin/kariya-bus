@@ -167,7 +167,7 @@ async function fetchDelayInfo() {
     const results = [];
 
     const matches = text.match(
-      /[^。\n]*(?:最大\d+分遅れ|運休)[^。\n]*/g
+  /[^。\n]*(?:\d+分遅れ|運休)[^。\n]*/g
 );
 
     if (matches) {
