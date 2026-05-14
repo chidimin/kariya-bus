@@ -177,6 +177,7 @@ async function fetchDelayInfo() {
 
     delayText.innerHTML =
       results.join("<br>");
+    document.getElementById("delayContainer").style.display = "block";
 
   } catch (error) {
 
