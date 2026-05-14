@@ -138,9 +138,10 @@ function renderBusTimes() {
   }
 }
 
-window.onload = function () {
+window.addEventListener("load", () => {
   renderBusTimes();
-};
+  fetchDelayInfo();
+});
 async function fetchDelayInfo() {
 
   const delayText =
