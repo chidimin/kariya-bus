@@ -163,7 +163,8 @@ async function fetchDelayInfo() {
     const doc =
       parser.parseFromString(html, "text/html");
 
-    const text = doc.body.innerText;
+    const text =
+  doc.documentElement.textContent || "";
 
     const results = [];
 
