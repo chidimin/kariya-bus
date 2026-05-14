@@ -541,7 +541,7 @@ async function fetchDelayInfo(){
 );
 
 const data = await response.json();
-const html = data.contents;
+const html = data.contents || "";
             
 
         if(!html.includes("東境線")){
