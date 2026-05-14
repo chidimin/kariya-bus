@@ -542,7 +542,12 @@ async function fetchDelayInfo(){
 
 const data = await response.json();
 const html = data.contents || "";
-            
+ document.getElementById("delay-text")
+.innerHTML =
+"取得文字数: " + html.length;
+    
+document.getElementById("delayContainer")
+.style.display = "block";
 
         if(!html.includes("東境線")){
     throw new Error("データ取得失敗");
