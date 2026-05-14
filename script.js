@@ -138,10 +138,7 @@ function renderBusTimes() {
   }
 }
 
-window.addEventListener("load", () => {
-  renderBusTimes();
-  fetchDelayInfo();
-});
+
 async function fetchDelayInfo() {
 
   const delayText =
@@ -189,7 +186,7 @@ delayText.innerHTML =
 
 document.getElementById("delayContainer").style.display = "block";
 
-  catch (error) {
+  } catch (error) {
 
   delayText.textContent =
     "遅延情報を取得できません";
