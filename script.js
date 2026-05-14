@@ -176,12 +176,16 @@ async function fetchDelayInfo() {
     }
 
     if (results.length === 0) {
-      results.push("現在遅延情報はありません");
-    }
 
-    delayText.innerHTML =
-      results.join("<br>");
-    document.getElementById("delayContainer").style.display = "block";
+  document.getElementById("delayContainer").style.display = "none";
+
+  return;
+}
+
+delayText.innerHTML =
+  results.join("<br>");
+
+document.getElementById("delayContainer").style.display = "block";
 
   } catch (error) {
 
