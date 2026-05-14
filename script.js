@@ -155,6 +155,9 @@ async function fetchDelayInfo() {
     const response = await fetch(url);
 
     const html = await response.text();
+    delayText.textContent = html;
+document.getElementById("delayContainer").style.display = "block";
+return;
 
     console.log(html);
 
