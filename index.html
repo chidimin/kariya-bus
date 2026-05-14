@@ -610,13 +610,16 @@ async function fetchDelayInfo(){
 
         delayContainer.style.display = "block";
 
-    }catch(error){
+    }catch (error) {
+    console.error(error);
 
-        console.error(error);
+    document.getElementById("delay-text")
+        .innerHTML =
+        `<div class="delayItem">${error}</div>`;
 
-        document.getElementById("delayContainer")
-            .style.display = "block";
-
+    document.getElementById("delayContainer")
+        .style.display = "block";
+    }
         document.getElementById("delay-text")
     .innerHTML =
     "<div class='delayItem'>遅延情報を取得できません</div>";
