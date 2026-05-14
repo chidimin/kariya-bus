@@ -196,6 +196,12 @@ document.getElementById("delayContainer").style.display = "block";
   }
 }
 
-fetchDelayInfo();
+window.addEventListener("load", () => {
 
-setInterval(fetchDelayInfo, 30000);
+  renderBusTimes();
+
+  fetchDelayInfo();
+
+  setInterval(fetchDelayInfo, 30000);
+
+});
