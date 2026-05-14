@@ -169,8 +169,9 @@ async function fetchDelayInfo() {
 
     const results = [];
 
-    const matches =
-  text.match(/[^。\n]*(遅れ|遅延|運休|調整)[^。\n]*/g);
+    const matches = text.match(
+  /[^。\n]*(?:最大\d+分遅れ|遅延|運休|調整中?)[^。\n]*/g
+);
 
     if (matches) {
       results.push(...matches);
