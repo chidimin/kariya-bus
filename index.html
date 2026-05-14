@@ -519,6 +519,8 @@ async function fetchDelayInfo(){
         const result = await response.json();
 
         const html = result.contents || "";
+        document.getElementById("delay-text").innerText =
+html.substring(0,3000);
 
         const results = [];
 
