@@ -156,6 +156,8 @@ async function fetchDelayInfo() {
 
     const html = await response.text();
 
+    console.log(html);
+
     const parser = new DOMParser();
 
     const doc =
