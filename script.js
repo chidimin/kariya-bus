@@ -149,7 +149,10 @@ async function fetchDelayInfo() {
   try {
 
     const url =
-      "https://api.allorigins.win/raw?url=https://www.buscatch.jp/rt/pc/index.php?xmlmc=0";
+  "https://api.allorigins.win/raw?url=" +
+  encodeURIComponent(
+    "https://buscatch.jp/rt3/unko_rosen_list.php?id=kariya-city"
+  );
 
     const response = await fetch(url);
 
