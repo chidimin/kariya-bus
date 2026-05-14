@@ -169,7 +169,7 @@ async function fetchDelayInfo() {
     const results = [];
 
     const matches =
-      text.match(/遅れ[^。\n]*/g);
+  text.match(/[^。\n]*遅れ[^。\n]*/g);
 
     if (matches) {
       results.push(...matches);
