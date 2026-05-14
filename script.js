@@ -162,12 +162,12 @@ async function fetchDelayInfo() {
       parser.parseFromString(html, "text/html");
 
     const text =
-  doc.documentElement.textContent || "";
+  doc.body?.innerText || "";
 
     const results = [];
 
     const matches = text.match(
-  /[^。\n]*(?:最大\d+分遅れ|遅延|運休|調整中?)[^。\n]*/g
+  /[^。\n]*(?:最大\d+分遅れ|運休|調整中)[^。\n]*/g
 );
 
     if (matches) {
