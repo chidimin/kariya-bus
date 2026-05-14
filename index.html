@@ -532,6 +532,9 @@ async function fetchDelayInfo(){
 
     try{
 
+        const url =
+"https://www.meitetsu-bus.co.jp/rosen/jikoku";
+        
         const response = await fetch(
   "https://api.allorigins.win/get?url=" +
   encodeURIComponent(url)
