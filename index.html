@@ -19,17 +19,23 @@ header{
     font-weight:bold;  
 }  
   
-.controls{  
-    padding:12px;  
-    display:flex;  
-    flex-wrap:wrap;  
-    gap:8px;  
-    justify-content:center;  
-    background:white;  
-    position:sticky;  
-    top:0;  
-    z-index:10;  
-}  
+.controls{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+}
+
+.buttonRow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.directionRow{
+    margin-top:-4px;
+}
   
 button{
     border:none;
@@ -39,12 +45,7 @@ button{
     cursor:pointer;  
     background:#ddd;  
 }  
-  .buttonRow{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-  }
+
 button.active{  
     background:#0095d9;  
     color:white;  
