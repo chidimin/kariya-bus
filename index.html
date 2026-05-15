@@ -185,6 +185,16 @@ rel="noopener noreferrer">
 let currentRoute = "east";  
 let currentDay = "weekday";  
 let currentDirection = "up";  
+        const today = new Date().getDay();
+
+// 0 = 日曜
+// 6 = 土曜
+
+if(today === 0 || today === 6){
+    currentDay = "holiday";
+}else{
+    currentDay = "weekday";
+}
   
 const data = {  
   
