@@ -124,13 +124,37 @@ th{
 <meta name="apple-mobile-web-app-capable" content="yes">  
 </head>  <body>  <header>  
 刈谷市バス時刻表  
-</header>  <div class="controls">  
-    <button onclick="setRoute('east')" id="routeEast" class="active">東境線</button>  
-    <button onclick="setRoute('west')" id="routeWest">西境線</button>  <button onclick="setDay('weekday')" id="weekdayBtn" class="active">平日</button>  
-<button onclick="setDay('holiday')" id="holidayBtn">土日祝</button>  
+</header>  <div class="controls">
 
-<button onclick="setDirection('up')" id="upButton" class="active">上り</button>  
-<button onclick="setDirection('down')" id="downButton">下り</button>
+    <div class="buttonRow">
+        <button onclick="setRoute('east')" id="routeEast" class="active">
+            東境線
+        </button>
+
+        <button onclick="setRoute('west')" id="routeWest">
+            西境線
+        </button>
+    </div>
+
+    <div class="buttonRow">
+        <button onclick="setDay('weekday')" id="weekdayBtn" class="active">
+            平日
+        </button>
+
+        <button onclick="setDay('holiday')" id="holidayBtn">
+            土日祝
+        </button>
+    </div>
+
+    <div class="buttonRow">
+        <button onclick="setDirection('up')" id="upButton" class="active">
+            上り
+        </button>
+
+        <button onclick="setDirection('down')" id="downButton">
+            下り
+        </button>
+    </div>
 
 </div>  <div class="routeTitle" id="title"></div>  
 <div class="info">  
