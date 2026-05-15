@@ -536,7 +536,15 @@ html += "</tr>";
   
 }  
   
-render();  
+if(currentDay === "weekday"){
+    document.getElementById("weekdayBtn").classList.add("active");
+    document.getElementById("holidayBtn").classList.remove("active");
+}else{
+    document.getElementById("holidayBtn").classList.add("active");
+    document.getElementById("weekdayBtn").classList.remove("active");
+}
+
+render();
   
     </script>  </body>  
 </html>
