@@ -1,10 +1,8 @@
-const CACHE_NAME = "kariya-bus-v1";
+const CACHE_NAME = "kariya-bus-v2";
 
 const urlsToCache = [
   "./",
   "./index.html",
-  "./style.css",
-  "./app.js",
   "./manifest.json"
 ];
 
